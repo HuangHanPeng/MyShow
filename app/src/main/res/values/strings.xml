@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyShow</string>
+    <string name="sign">注册</string>
+    <string name="user_email">User/email</string>
+</resources>
