@@ -1,8 +1,10 @@
 package com.example.myshow;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 import static com.example.myshow.Contants.LoginUrl;
 import static com.example.myshow.Contants.appId;
 import static com.example.myshow.Contants.appSecret;
+import static com.example.myshow.Contants.postConnect;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,14 +30,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
     private OkHttpClient okHttpClient;
     private Button lButton;
     private Button sButton;
     private EditText UserName;
     private EditText Password;
-    public final static String TAG = "debug";
+
     private user mUser;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,63 +55,47 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-        lButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mUser.setmUserName(UserName.getText().toString());
-                mUser.setmPassword(Password.getText().toString());
-
-
-                JSONObject usr = new JSONObject();
-                try {
-                    usr.put("password",mUser.getmPassword());
-                    usr.put("username",mUser.getmUserName());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d(TAG, usr.toString());
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),usr.toString());
-
-                FormBody formBody = new FormBody.Builder()
-                        .add("password",mUser.getmPassword())
-                        .add("username",mUser.getmUserName())
-                        .build();
-
-
-                Request request = new Request.Builder()
-                        .addHeader("Accept","application/json, text/plain, */*")
-                        .addHeader("Content-Type","application/json")
-                        .addHeader("appId",appId)
-                        .addHeader("appSecret",appSecret)
-                        .url(LoginUrl)
-                        .post(formBody)
-                        .build();
-                try{
-                    OkHttpClient client = new OkHttpClient();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            e.printStackTrace();
-                            Log.d(TAG,"wrong!");
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-
-                            final String body = response.body().string();
-                                Log.d(TAG,body);
-
-
-
-
-
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        lButton.setOnClickListener(this);
     }
+
+    private Callback callback = new Callback() {
+        @Override
+        public void onFailure(Call call, IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "wrong!");
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+
+            final String body = response.body().string();
+            Log.d(TAG, body);
+        }
+    };
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+                case R.id.login:
+                    mUser.setmUserName(UserName.getText().toString());
+                    mUser.setmPassword(Password.getText().toString());
+                    FormBody formBody = new FormBody.Builder()
+                            .add("password", mUser.getmPassword())
+                            .add("username", mUser.getmUserName())
+                            .build();
+                    postConnect(formBody,LoginUrl,callback);
+                break;
+            case R.id.sign:
+
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + view);
+        }
+    }
+
+
+
+
 }
