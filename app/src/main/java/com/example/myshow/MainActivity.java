@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             final String body = response.body().string();
             if(response.isSuccessful()){
                 try {
+
                     JSONObject object = new JSONObject(body);
 
                     code = object.getInt("code");
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
-
+    //注册成功后页面跳转
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         switch (view.getId()) {
+                //按下的是登录按键
                 case R.id.login:
                     mUser.setmUserName(UserName.getText().toString());
                     mUser.setmPassword(Password.getText().toString());
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(code == 500)
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 break;
+                //按下注册按键
             case R.id.sign:
                 Log.d(TAG, "sign: click");
                 Intent signintent = new Intent(MainActivity.this,sign.class);

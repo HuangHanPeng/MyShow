@@ -28,6 +28,7 @@ public class sign extends AppCompatActivity {
     public String msg = "用户名已存在";
     private EditText _user;
     private EditText _psw;
+    //注册功能回调实现
     Callback callback = new Callback() {
         @Override
         public void onFailure(Call call, IOException e) {
@@ -61,6 +62,7 @@ public class sign extends AppCompatActivity {
         Button btn = findViewById(sign1);
         _user = findViewById(R.id.username2);
         _psw = findViewById(R.id.Password2);
+        //注册按钮监听
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,6 +71,7 @@ public class sign extends AppCompatActivity {
                 try {
                     jsonObject.put("password",_user.getText());
                     jsonObject.put("username",_psw.getText());
+                    //api post请求
                     Contants.postConnect(jsonObject.toString(),Contants.signUrl,callback);
 
                     intent.putExtra("code",code);
@@ -76,6 +79,7 @@ public class sign extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 setResult(RESULT_OK,intent);
                 finish();
             }
