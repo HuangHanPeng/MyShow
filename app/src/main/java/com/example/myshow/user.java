@@ -1,8 +1,10 @@
 package com.example.myshow;
 
 public class user {
-    private String mUserName;
-    private String mPassword;
+    private String mUserName = null;
+    private String mPassword = null;
+
+
 
     public void setmUserName(String userName){
         this.mUserName = userName;

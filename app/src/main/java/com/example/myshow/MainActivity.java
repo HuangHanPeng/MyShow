@@ -4,16 +4,21 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 import static com.example.myshow.Contants.LoginUrl;
 import static com.example.myshow.Contants.appId;
 import static com.example.myshow.Contants.appSecret;
+import static com.example.myshow.Contants.loginmsg;
 import static com.example.myshow.Contants.postConnect;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button sButton;
     private EditText UserName;
     private EditText Password;
-
+    private int code = 0;
+    private String msg = "";
     private user mUser;
 
 
@@ -52,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         UserName = findViewById(R.id.username);
         Password = findViewById(R.id.Password);
         lButton = findViewById(R.id.login);
+        sButton = findViewById(R.id.sign);
 
-
-
+        sButton.setOnClickListener(this);
         lButton.setOnClickListener(this);
     }
 
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onFailure(Call call, IOException e) {
             e.printStackTrace();
+
             Log.d(TAG, "wrong!");
         }
 
@@ -69,10 +76,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onResponse(Call call, Response response) throws IOException {
 
             final String body = response.body().string();
-            Log.d(TAG, body);
+            if(response.isSuccessful()){
+                try {
+                    JSONObject object = new JSONObject(body);
+
+                    code = object.getInt("code");
+
+                    msg = object.getString("msg");
+
+                } catch (JSONException e) {
+                    Log.d(TAG,"wrong!");
+                    e.printStackTrace();
+                }
+                Log.d(TAG, body);
+            }else{
+                Log.d(TAG,body);
+            }
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        msg = "Sign sucessful!";
+        switch (requestCode){
+            case 1:
+                code = data.getIntExtra("code",0);
+                try{
+                    msg = data.getStringExtra("sign_msg");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+                if(code == 200)
+                    Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
 
     @Override
     public void onClick(View view) {
@@ -81,13 +129,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case R.id.login:
                     mUser.setmUserName(UserName.getText().toString());
                     mUser.setmPassword(Password.getText().toString());
+                    Log.d(TAG,mUser.getmUserName());
+                    Log.d(TAG,mUser.getmPassword());
+                    if(mUser.getmUserName().isEmpty() || mUser.getmPassword().isEmpty()) {
+                        Toast.makeText(MainActivity.this, loginmsg, Toast.LENGTH_SHORT).show();
+                        break;
+                    }
                     FormBody formBody = new FormBody.Builder()
                             .add("password", mUser.getmPassword())
                             .add("username", mUser.getmUserName())
                             .build();
                     postConnect(formBody,LoginUrl,callback);
+                    if(code == 500)
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sign:
+                Log.d(TAG, "sign: click");
+                Intent signintent = new Intent(MainActivity.this,sign.class);
+
+                startActivityForResult(signintent,1);
 
                 break;
             default:

@@ -2,6 +2,7 @@ package com.example.myshow;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 public class Login extends AppCompatActivity {
@@ -11,6 +12,13 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Intent intent = getIntent();
+
+
+
 
     }
+
+
+
 }
