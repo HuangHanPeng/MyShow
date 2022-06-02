@@ -48,29 +48,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //进入登录系统
         loginsys();
+        //主页面初始化
         initPager();
 
 
     }
 
     private void initPager() {
-        //进入登录系统
 
+        //创建了viewPager控件，实现滑动效果
         viewPager = findViewById(R.id.viewpage);
+        //创建了fragment列表存储fragment对象
         ArrayList<Fragment> fragments = new ArrayList<>();
+        /**
+            fragment依赖MainActivity,画面渲染主要在layout_main
+        **/
         fragments.add(HomeFragement.newInstance("first"));
         fragments.add(HomeFragement.newInstance("sencond"));
         fragments.add(HomeFragement.newInstance("thirth"));
+        //创建了Fragment适配器
         ViewPagerFragmentAdapter viewPagerAdapter
                 = new ViewPagerFragmentAdapter(getSupportFragmentManager(),
                 getLifecycle(),fragments);
+        //viewPager渲染
         viewPager.setAdapter(viewPagerAdapter);
     }
 
     private void loginsys() {
 
         Intent loginIntent = new Intent(MainActivity.this,Login.class);
+        //切换页面，当另一页面完成任务时，在onActivityResult获取参数
         startActivityForResult(loginIntent,1);
     }
 
