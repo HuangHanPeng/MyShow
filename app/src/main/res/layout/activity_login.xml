@@ -82,20 +82,7 @@
 
         </CheckBox>
 
-        <TextView
-            android:id="@+id/tv_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/cb_remember_pwd"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="8dp"
-            android:text="注册"
-            android:textColor="@color/black"
 
-            >
-
-        </TextView>
     </RelativeLayout>
 
     <RelativeLayout
@@ -115,6 +102,7 @@
             android:textColor="@color/white">
 
         </Button>
+
         <Button
             android:id="@+id/sign"
             android:layout_width="match_parent"
@@ -122,8 +110,7 @@
             android:layout_alignParentTop="true"
             android:background="@color/teal_200"
             android:text="Sign"
-            android:textColor="@color/white">
-        </Button>
+            android:textColor="@color/white"></Button>
 
     </RelativeLayout>
 

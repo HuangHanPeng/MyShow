@@ -100,3 +100,38 @@ android综合设计项目
 ### 项目开发第三阶段
 
 >优化布局
+
+### 更新
+
+类：
+
+![image-20220602230836437](H:\AndroidStudioProject\MyShow\image-20220602230836437.png)
+
+Contants：静态类
+
+用于定义常用变量以及函数如请求头
+
+MainActivity：
+
+主页面渲染界面，在该页面实现各种功能
+
+user类：
+
+用于定义用户的各种属性
+
+mImage类：
+
+用于定义图片的各种属性
+
+Imagelist：
+
+用于接收图片列表
+
+ViewPagerFragmentAdapter：
+
+在viewPage中嵌套Fragment所定义的适配器，用于切换不同的fragment
+
+Fragment：
+
+fragment是一种更灵活的页面，项目的所有的页面渲染均由fragment完成。
+
