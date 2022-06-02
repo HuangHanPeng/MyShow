@@ -29,6 +29,7 @@ public final class Contants {
     public static final String login = "login";
     public static final String sign = "register";
 
+
     //请求头添加
     public static String appId = "4d0b26ccf9804ddebec579d5fee73713";
     public static String appSecret = "5320843e542ad80474f6183a866ab69069f2e";
@@ -37,6 +38,7 @@ public final class Contants {
     //请求url地址
     public static final String LoginUrl = usrurl + login;
     public static final String signUrl = usrurl + sign;
+
 
 
 

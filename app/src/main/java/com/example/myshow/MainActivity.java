@@ -9,6 +9,9 @@ import static com.example.myshow.Contants.postConnect;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +19,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,7 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.ref.PhantomReference;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -36,129 +42,55 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-
-    private OkHttpClient okHttpClient;
-    private Button lButton;
-    private Button sButton;
-    private EditText UserName;
-    private EditText Password;
-    private int code = 0;
-    private String msg = "";
-    private user mUser;
-
-
-
-
+    ViewPager2 viewPager;
+    user mUser;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_main);
+        loginsys();
+        initPager();
 
-        mUser = new user();
-        UserName = findViewById(R.id.username);
-        Password = findViewById(R.id.Password);
-        lButton = findViewById(R.id.login);
-        sButton = findViewById(R.id.sign);
 
-        sButton.setOnClickListener(this);
-        lButton.setOnClickListener(this);
     }
 
-    private Callback callback = new Callback() {
-        @Override
-        public void onFailure(Call call, IOException e) {
-            e.printStackTrace();
+    private void initPager() {
+        //进入登录系统
 
-            Log.d(TAG, "wrong!");
-        }
+        viewPager = findViewById(R.id.viewpage);
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(HomeFragement.newInstance("first"));
+        fragments.add(HomeFragement.newInstance("sencond"));
+        fragments.add(HomeFragement.newInstance("thirth"));
+        ViewPagerFragmentAdapter viewPagerAdapter
+                = new ViewPagerFragmentAdapter(getSupportFragmentManager(),
+                getLifecycle(),fragments);
+        viewPager.setAdapter(viewPagerAdapter);
+    }
 
-        @Override
-        public void onResponse(Call call, Response response) throws IOException {
+    private void loginsys() {
 
-            final String body = response.body().string();
-            if(response.isSuccessful()){
-                try {
+        Intent loginIntent = new Intent(MainActivity.this,Login.class);
+        startActivityForResult(loginIntent,1);
+    }
 
-                    JSONObject object = new JSONObject(body);
-
-                    code = object.getInt("code");
-
-                    msg = object.getString("msg");
-
-                } catch (JSONException e) {
-                    Log.d(TAG,"wrong!");
-                    e.printStackTrace();
-                }
-                Log.d(TAG, body);
-            }else{
-                Log.d(TAG,body);
-            }
-        }
-    };
-    //注册成功后页面跳转
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        msg = "Sign sucessful!";
         switch (requestCode){
             case 1:
-                code = data.getIntExtra("code",0);
-                try{
-                    msg = data.getStringExtra("sign_msg");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-
-                if(code == 200)
-                    Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
-                else{
-                    Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+                if(requestCode == RESULT_OK){
+                    mUser = (user) data.getSerializableExtra("user");
+                    Log.d(TAG, "login sucessful!");
                 }
                 break;
             default:
                 break;
         }
-
     }
 
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()) {
-                //按下的是登录按键
-                case R.id.login:
-                    mUser.setmUserName(UserName.getText().toString());
-                    mUser.setmPassword(Password.getText().toString());
-                    Log.d(TAG,mUser.getmUserName());
-                    Log.d(TAG,mUser.getmPassword());
-                    if(mUser.getmUserName().isEmpty() || mUser.getmPassword().isEmpty()) {
-                        Toast.makeText(MainActivity.this, loginmsg, Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                    FormBody formBody = new FormBody.Builder()
-                            .add("password", mUser.getmPassword())
-                            .add("username", mUser.getmUserName())
-                            .build();
-                    postConnect(formBody,LoginUrl,callback);
-                    if(code == 500)
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                break;
-                //按下注册按键
-            case R.id.sign:
-                Log.d(TAG, "sign: click");
-                Intent signintent = new Intent(MainActivity.this,sign.class);
-
-                startActivityForResult(signintent,1);
-
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + view);
-        }
     }
-
-
-
-
 }
