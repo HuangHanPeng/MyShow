@@ -77,9 +77,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:background="@color/teal_200"
+
+            android:background="@color/lightseagreen"
             android:text="Sign"
             android:textColor="@color/white">
+
         </Button>
 
     </RelativeLayout>

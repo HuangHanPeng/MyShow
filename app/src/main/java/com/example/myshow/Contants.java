@@ -48,7 +48,6 @@ public final class Contants {
         Request request = new Request.Builder()
                 .addHeader("appId", appId)
                 .addHeader("appSecret", appSecret)
-                .addHeader("Authorization",token)
                 .url(url)
                 .post(formBody)
                 .build();
@@ -67,7 +66,6 @@ public final class Contants {
         Request request = new Request.Builder()
                 .addHeader("appId", appId)
                 .addHeader("appSecret", appSecret)
-                .addHeader("Authorization",token)
                 .url(url)
                 .post(requestBody)
                 .build();

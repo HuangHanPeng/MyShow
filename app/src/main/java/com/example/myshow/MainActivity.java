@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -43,7 +45,10 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     ViewPager2 viewPager;
-    user mUser;
+    private LinearLayout t_home,t_collection,t_userpage,t_add;
+    private ImageView ivhome,ivcollection,ivuser,ivCurrent;
+
+    private user mUser;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginsys();
         //主页面初始化
         initPager();
+        //滑动页面联动
+        initIamgeView();
+
+    }
+
+    private void initIamgeView() {
+
+        ivhome = findViewById(R.id.ivHome);
+        ivcollection = findViewById(R.id.ivCollection);
+        ivuser = findViewById(R.id.ivUser);
+
+        t_home = findViewById(R.id.home);
+        t_home.setOnClickListener(this);
+        t_collection = findViewById(R.id.collection);
+        t_collection.setOnClickListener(this);
+        t_userpage = findViewById(R.id.userpage);
+        t_userpage.setOnClickListener(this);
+        t_add = findViewById(R.id.addtion);
+        t_add.setOnClickListener(this);
+
+        ivhome.setSelected(true);
+        ivCurrent = ivhome;
 
 
     }
@@ -74,6 +101,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getLifecycle(),fragments);
         //viewPager渲染
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                changView(position);
+            }
+        });
+    }
+    //实现页面滑动导航栏切换
+    private void changView(int position) {
+        ivCurrent.setSelected(false);
+        switch (position){
+            case R.id.home:
+                viewPager.setCurrentItem(0);
+            case 0:
+                ivhome.setSelected(true);
+                ivCurrent = ivhome;
+                break;
+            case R.id.collection:
+                viewPager.setCurrentItem(1);
+            case 1:
+                ivcollection.setSelected(true);
+                ivCurrent = ivcollection;
+                break;
+            case R.id.userpage:
+                viewPager.setCurrentItem(2);
+            case 2:
+                ivuser.setSelected(true);
+                ivCurrent = ivuser;
+                break;
+        }
+
     }
 
     private void loginsys() {
@@ -100,6 +159,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        if(view.getId() == R.id.addtion){
+            addNewImage();
+        }
+        changView(view.getId());
+    }
+
+    private void addNewImage() {
 
     }
 }
