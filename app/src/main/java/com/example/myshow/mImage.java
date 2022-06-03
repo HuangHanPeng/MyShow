@@ -1,13 +1,28 @@
 package com.example.myshow;
 
-public class mImage {
-    private Integer id;
-    private Integer imageCode;
-    private String content;
-    private Integer pUserld;
-    private String title;
+import com.google.gson.annotations.SerializedName;
 
-    public void setId(Integer id) {
+import java.util.List;
+
+public class mImage {
+    @SerializedName("id")
+    private long id;
+    @SerializedName("pUserId")
+    private long pUserId;
+    @SerializedName("imageCode")
+    private long imageCode;
+    @SerializedName("title")
+    private String title;
+    @SerializedName("content")
+    private String content;
+    @SerializedName("username")
+    private String pUserName;
+    @SerializedName("createTime")
+    private long createtime;
+    @SerializedName("imageUrlList")
+    private String imageUrL;
+
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -15,36 +30,61 @@ public class mImage {
         this.content = content;
     }
 
-    public void setImageCode(Integer imageCode) {
-        this.imageCode = imageCode;
-    }
-
-    public void setpUserld(Integer pUserld) {
-        this.pUserld = pUserld;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public Integer getId() {
+    public void setpUserName(String pUserName) {
+        this.pUserName = pUserName;
+    }
+
+    public void setCreatetime(long createtime) {
+        this.createtime = createtime;
+    }
+
+    public void setImageCode(long imageCode) {
+        this.imageCode = imageCode;
+    }
+
+    public void setImageUrL(String imageUrL) {
+        this.imageUrL = imageUrL;
+    }
+
+    public void setpUserId(long pUserId) {
+        this.pUserId = pUserId;
+    }
+
+    public long getCreatetime() {
+        return createtime;
+    }
+
+    public String getImageUrL() {
+        return imageUrL;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public Integer getImageCode() {
+    public long getImageCode() {
         return imageCode;
     }
 
-    public Integer getpUserld() {
-        return pUserld;
+    public long getpUserId() {
+        return pUserId;
     }
 
     public String getContent() {
         return content;
     }
 
+    public String getpUserName() {
+        return pUserName;
+    }
+
     public String getTitle() {
         return title;
     }
+
 }
 

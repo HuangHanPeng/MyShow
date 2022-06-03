@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,23 +56,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout t_home,t_collection,t_userpage,t_add;
     private ImageView ivhome,ivcollection,ivuser,ivCurrent;
 
-    private user mUser;
+    private user mUser = new user();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActionBar actionBar = getSupportActionBar();
-
-
-        //进入登录系统
         loginsys();
-        //主页面初始化
-        initPager();
-        //滑动页面联动
-        initIamgeView();
+        Log.d("debug", "onCreate: iniPager");
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,9 +122,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
             fragment依赖MainActivity,画面渲染主要在layout_main
         **/
-        fragments.add(HomeFragement.newInstance("first"));
-        fragments.add(HomeFragement.newInstance("sencond"));
-        fragments.add(HomeFragement.newInstance("thirth"));
+            fragments.add(HomeFragement.newInstance(mUser.getmId()));
+            fragments.add(HomeFragement.newInstance(mUser.getmId()));
+            fragments.add(HomeFragement.newInstance(mUser.getmId()));
+            Log.d("debug", String.valueOf(mUser.getmId()));
+
         //创建了Fragment适配器
         ViewPagerFragmentAdapter viewPagerAdapter
                 = new ViewPagerFragmentAdapter(getSupportFragmentManager(),
@@ -177,12 +177,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("debug", String.valueOf(requestCode));
         switch (requestCode){
             case 1:
-                if(requestCode == RESULT_OK){
-                    mUser = (user) data.getSerializableExtra("user");
-                    Log.d(TAG, "login sucessful!");
-                }
+                mUser = (user) data.getSerializableExtra("user");
+
+                Log.d("debug", "login sucessful!");
+                //主页面初始化
+                initPager();
+                //滑动页面联动
+                initIamgeView();
+
                 break;
             default:
                 break;

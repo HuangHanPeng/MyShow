@@ -28,6 +28,7 @@ public final class Contants {
     //api接口地址
     public static final String login = "login";
     public static final String sign = "register";
+    public static final String Load = "share";
 
 
     //请求头添加
@@ -38,7 +39,7 @@ public final class Contants {
     //请求url地址
     public static final String LoginUrl = usrurl + login;
     public static final String signUrl = usrurl + sign;
-
+    public static final String LoadUrl = usrurl + Load;
 
 
 
