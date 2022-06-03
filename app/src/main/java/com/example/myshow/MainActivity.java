@@ -7,7 +7,9 @@ import static com.example.myshow.Contants.appSecret;
 import static com.example.myshow.Contants.loginmsg;
 import static com.example.myshow.Contants.postConnect;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar actionBar = getSupportActionBar();
+
+
         //进入登录系统
         loginsys();
         //主页面初始化
@@ -60,6 +70,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //滑动页面联动
         initIamgeView();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.NewPhoto:
+                Toast.makeText(this,"hello",Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void setSupportActionBar(Toolbar toolbar) {
     }
 
     private void initIamgeView() {
@@ -74,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         t_collection.setOnClickListener(this);
         t_userpage = findViewById(R.id.userpage);
         t_userpage.setOnClickListener(this);
-        t_add = findViewById(R.id.addtion);
-        t_add.setOnClickListener(this);
+
+
 
         ivhome.setSelected(true);
         ivCurrent = ivhome;
@@ -159,9 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.addtion){
-            addNewImage();
-        }
+
         changView(view.getId());
     }
 
