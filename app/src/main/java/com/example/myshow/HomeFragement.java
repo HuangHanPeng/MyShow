@@ -1,9 +1,8 @@
 package com.example.myshow;
 
 import static com.example.myshow.Contants.LoadUrl;
-import static com.example.myshow.Contants.TAG;
+import static com.example.myshow.Contants.getConnect;
 import static com.example.myshow.Contants.postConnect;
-import static com.example.myshow.Contants.usrurl;
 
 import android.os.Bundle;
 
@@ -14,21 +13,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
-
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.ref.PhantomReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.Response;
 
 /**
@@ -47,15 +43,15 @@ public class HomeFragement extends Fragment {
     private List<mImage> images;
     private ImageAdapter ImgAdapter;
 
-    private long mId;
+    private String mId;
     public HomeFragement() {
         // Required empty public constructor
     }
 
-    public static HomeFragement newInstance(long UID) {
+    public static HomeFragement newInstance(String UID) {
         HomeFragement fragment = new HomeFragement();
         Bundle args = new Bundle();
-        args.putLong(ARG_UID, UID);
+        args.putString(ARG_UID, UID);
 
         fragment.setArguments(args);
 
@@ -69,14 +65,19 @@ public class HomeFragement extends Fragment {
 
 
     private Callback Loadcallback = new Callback() {
+
         @Override
         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+
             final String body = response.body().string();
             if(response.isSuccessful()){
                new Thread(new Runnable() {
                    @Override
                    public void run() {
-                       Log.d(TAG, body);
+                       Log.d("debug", body);
+
+
 
                    }
                }).start();
@@ -86,7 +87,7 @@ public class HomeFragement extends Fragment {
 
         @Override
         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-            Log.d(TAG, String.valueOf(e));
+            Log.d("debug", String.valueOf(e));
         }
     };
 
@@ -95,15 +96,20 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mId =  getArguments().getLong(ARG_UID);
+        mId =  getArguments().getString(ARG_UID);
         LoadImageData();
     }
 
     private void LoadImageData() {
-        FormBody formBody = new FormBody.Builder()
-                .add("userId", String.valueOf(mId))
-                .build();
-        postConnect(formBody,LoadUrl,Loadcallback);
+
+        getAsyn();
+    }
+
+    private void getAsyn(){
+        Map<String, Object> hmap;
+        hmap = new HashMap<>();
+        hmap.put("userId",mId);
+        getConnect(hmap,LoadUrl,Loadcallback);
 
     }
 

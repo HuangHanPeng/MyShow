@@ -7,10 +7,12 @@ import androidx.annotation.NonNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,10 +26,11 @@ public final class Contants {
     public final static String TAG = "debug";
     public static final String loginmsg = "用户名或密码不能为空！";
     //通用的url地址
-    public static final String usrurl = "http://47.107.52.7:88/member/photo/user/";
+    public static final String usrurl = "http://47.107.52.7:88/member/photo/";
+
     //api接口地址
-    public static final String login = "login";
-    public static final String sign = "register";
+    public static final String login = "user/login";
+    public static final String sign = "user/register";
     public static final String Load = "share";
 
 
@@ -79,5 +82,45 @@ public final class Contants {
         }
     }
 
+    public static final void getConnect(Map<String, Object> params, String url, Callback callback){
+        String requestparams = getRequestParams(params);
+        url += requestparams;
+        Request request = new Request.Builder()
+                .addHeader("appId",appId)
+                .addHeader("appSecret",appSecret)
+                .url(url)
+                .get()
+                .build();
+        try {
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+    public static final String getRequestParams(Map<String, Object> params){
+            StringBuffer sBuffer = new StringBuffer("?");
+            int i = 0;
+            if(EmptyUtils.isNotEmpty(params)){
+                for(Map.Entry<String,Object> item : params.entrySet()){
+                    Object value = item.getValue();
+                    if(EmptyUtils.isNotEmpty(value)){
+                        if(i != 0) sBuffer.append("&");
+                        sBuffer.append(item.getKey());
+                        sBuffer.append("=");
+                        sBuffer.append(value);
+                        i++;
+                    }
+
+                }
+                return sBuffer.toString();
+            }else {
+                return "";
+            }
+
+    }
 
 }

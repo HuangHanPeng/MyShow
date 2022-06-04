@@ -39,7 +39,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private int code = 0;
     private String msg = "";
     private user mUser;
-    private long id;
+    private String id;
     private String sex;
     private String introduce;
 
@@ -84,7 +84,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     //解析用户数据
                     data = object.getJSONObject("data");
 
-                    id = data.getLong("id");
+                    id = data.getString("id");
 
                     sex = data.getString("sex");
 
