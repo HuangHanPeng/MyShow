@@ -59,7 +59,8 @@ public class ImageAdapter extends ArrayAdapter<mImage> {
         vh.tvUsername.setText(img.getpUserName());
         vh.tvCreateTime.setText(String.valueOf(img.getCreatetime()));
         vh.tvImage.setTag(position);
-        Glide.with(mContext).load(img.getImageUrlList().indexOf(0));
+
+        Glide.with(mContext).load(img.getImageUrlList().get(0)).into(vh.tvImage);
         return view;
     }
 

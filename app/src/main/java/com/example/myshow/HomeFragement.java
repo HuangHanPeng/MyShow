@@ -156,7 +156,7 @@ public class HomeFragement extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceStat) {
         if(rootView == null){
             rootView = inflater.inflate(R.layout.fragment_home_fragement,
                     container, 

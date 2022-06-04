@@ -15,46 +15,65 @@
             android:src="@drawable/image_gray" />
 
         <TextView
+            android:id="@+id/staticTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/tvimage"
+            android:text="@string/staticTitle" />
+
+        <TextView
             android:id="@+id/tvtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="11dp"
+            android:layout_marginLeft="10dp"
+
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/tvimage"
-            android:gravity="center"
-            android:hint="@string/None"
 
-            />
+            android:layout_toRightOf="@+id/staticTitle"
+            android:hint="@string/None" />
+
+        <TextView
+            android:id="@+id/staticName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="50dp"
+
+
+            android:layout_toEndOf="@+id/tvimage"
+            android:text="@string/statticName" />
 
         <TextView
             android:id="@+id/pUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="13dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/tvimage"
-            android:gravity="center"
+            android:layout_toRightOf="@+id/staticName"
             android:hint="@string/None" />
 
         <TextView
             android:id="@+id/createTime"
-            android:layout_width="108dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="1dp"
             android:layout_marginBottom="15dp"
-            android:hint="@string/None"
             android:gravity="center"
-            />
+            android:hint="@string/None" />
+
         <View
             android:id="@+id/v_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"/>
+            android:background="@color/gray" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

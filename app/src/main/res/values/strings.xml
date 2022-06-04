@@ -5,4 +5,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="None">null</string>
+    <string name="staticTitle">标题:</string>
+    <string name="statticName">发布者:</string>
 </resources>
