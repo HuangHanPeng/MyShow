@@ -1,5 +1,6 @@
 package com.example.myshow;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -20,7 +21,10 @@ public class mImage {
     @SerializedName("createTime")
     private long createtime;
     @SerializedName("imageUrlList")
-    private String imageUrL;
+    private List<String> imageUrlList;
+
+    @Expose(serialize = true,deserialize = false)
+    private String imageUrl;
 
     public void setId(long id) {
         this.id = id;
@@ -46,12 +50,20 @@ public class mImage {
         this.imageCode = imageCode;
     }
 
-    public void setImageUrL(String imageUrL) {
-        this.imageUrL = imageUrL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setpUserId(long pUserId) {
         this.pUserId = pUserId;
+    }
+
+    public void setImageUrlList(List<String> imageUrlList) {
+        this.imageUrlList = imageUrlList;
+    }
+
+    public List<String> getImageUrlList() {
+        return imageUrlList;
     }
 
     public long getCreatetime() {
@@ -59,11 +71,15 @@ public class mImage {
     }
 
     public String getImageUrL() {
-        return imageUrL;
+        return imageUrl;
     }
 
     public long getId() {
         return id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public long getImageCode() {

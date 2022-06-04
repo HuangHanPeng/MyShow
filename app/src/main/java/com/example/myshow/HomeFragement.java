@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -76,7 +78,7 @@ public class HomeFragement extends Fragment {
                    @Override
                    public void run() {
                        Log.d("debug", body);
-
+                       Gson gson = new Gson();
 
 
                    }
