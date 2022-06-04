@@ -20,11 +20,73 @@ public class mImage {
     private String pUserName;
     @SerializedName("createTime")
     private long createtime;
+    @SerializedName("likeId")
+    private String likeId;
+    @SerializedName("likeName")
+    private String likeName;
+    @SerializedName("hasLike")
+    private boolean hasLike;
+    @SerializedName("collectId")
+    private String collectId;
+    @SerializedName("collectNum")
+    private String collectNum;
+    @SerializedName("hasCollect")
+    private boolean hasCollect;
+    @SerializedName("hasFocus")
+    private boolean hasFocus;
     @SerializedName("imageUrlList")
     private List<String> imageUrlList;
 
-    @Expose(serialize = true,deserialize = false)
-    private String imageUrl;
+
+    public void setCollectId(String collectId) {
+        this.collectId = collectId;
+    }
+
+    public void setCollectNum(String collectNum) {
+        this.collectNum = collectNum;
+    }
+
+    public void setHasCollect(boolean hasCollect) {
+        this.hasCollect = hasCollect;
+    }
+
+    public void setHasFocus(boolean hasFocus) {
+        this.hasFocus = hasFocus;
+    }
+
+    public void setHasLike(boolean hasLike) {
+        this.hasLike = hasLike;
+    }
+
+    public void setLikeId(String likeId) {
+        this.likeId = likeId;
+    }
+
+    public void setLikeName(String likeName) {
+        this.likeName = likeName;
+    }
+
+    public String getCollectId() {
+        return collectId;
+    }
+
+    public String getCollectNum() {
+        return collectNum;
+    }
+
+    public String getLikeId() {
+        return likeId;
+    }
+
+    public String getLikeName() {
+        return likeName;
+    }
+
+
+
+
+
+
 
     public void setId(long id) {
         this.id = id;
@@ -50,9 +112,7 @@ public class mImage {
         this.imageCode = imageCode;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+
 
     public void setpUserId(long pUserId) {
         this.pUserId = pUserId;
@@ -70,16 +130,8 @@ public class mImage {
         return createtime;
     }
 
-    public String getImageUrL() {
-        return imageUrl;
-    }
-
     public long getId() {
         return id;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
     }
 
     public long getImageCode() {

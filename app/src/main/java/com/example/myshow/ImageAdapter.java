@@ -1,5 +1,6 @@
 package com.example.myshow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class ImageAdapter extends ArrayAdapter<mImage> {
 
     }
 
+    @SuppressLint("CheckResult")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -56,7 +58,7 @@ public class ImageAdapter extends ArrayAdapter<mImage> {
         vh.tvUsername.setText(img.getpUserName());
         vh.tvCreateTime.setText((int) img.getCreatetime());
         vh.tvImage.setTag(position);
-        Glide.with(mContext).load(img.getImageUrL());
+        Glide.with(mContext).load(img.getImageUrlList().indexOf(0));
         return view;
     }
 

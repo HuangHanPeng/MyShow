@@ -1,6 +1,7 @@
 package com.example.myshow;
 
 import static com.example.myshow.Contants.LoadUrl;
+import static com.example.myshow.Contants.TAG;
 import static com.example.myshow.Contants.getConnect;
 import static com.example.myshow.Contants.postConnect;
 
@@ -16,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +69,7 @@ public class HomeFragement extends Fragment {
     }
 
 
+
     private Callback Loadcallback = new Callback() {
 
         @Override
@@ -79,6 +83,10 @@ public class HomeFragement extends Fragment {
                    public void run() {
                        Log.d("debug", body);
                        Gson gson = new Gson();
+                       //定义反序列化类型
+                       Type jsonType = new TypeToken<BaseResponse<Data>>(){}.getType();
+                       //解析
+                       BaseResponse<Data> dataResponse = gson.fromJson(body,jsonType);
 
 
                    }
