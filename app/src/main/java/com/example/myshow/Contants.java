@@ -35,8 +35,8 @@ public final class Contants {
 
 
     //请求头添加
-    public static String appId = "4d0b26ccf9804ddebec579d5fee73713";
-    public static String appSecret = "5320843e542ad80474f6183a866ab69069f2e";
+    public static String appId = "cb56ce0d2dad4ac5831e37e6d999bc7f";
+    public static String appSecret = "95194c6e29a67fe0e4b478538115326986110";
     //public static final String token = "bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTQyMjEzODYsInVzZXJfbmFtZSI6IjE2IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImFjOTk3ZDIwLWU0ODItNDkwMy04ODVjLTE1M2E5OWMyMjdjYyIsImNsaWVudF9pZCI6ImNvaW4tYXBpIiwic2NvcGUiOlsiYWxsIl19.HklB2yJ1-wkVhQJi01OsWAGnUTZSwVNEb8KDgV_wS1aaVVSmr5fCwqF8eTgBTImks7YFKHvAAM8Zi39uBONIeKCVAZ0Z4-4e2O7w3Kz-WIFGbF3OqywUsnnw3MVanG_9-CSBnM2YFjBjgsnFuI_-4MA7bpMWb8ffo__ja9P5xQXYFLEJcrTEdZnfPBejFPbMz1aS34g9asRHVnUIR_RbV5NPjvQhKNstHQp7CuKGcs3kDn5sJxAU6l3Qj0t7TjcxeAR_j1X8o0j_Vfek_TX4apzHYiOJkjiGLcgxOsksOjtT9l5g10XAqrRB4qWYMxoh07mgplG_WDk93D7Y2tWkPQ";
 
     //请求url地址

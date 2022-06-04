@@ -9,11 +9,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -24,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +50,7 @@ public class HomeFragement extends Fragment {
     private ListView lvImageList;
     private List<mImage> images;
     private ImageAdapter ImgAdapter;
-
+    public FragmentActivity activty;
     private String mId;
     public HomeFragement() {
         // Required empty public constructor
@@ -59,15 +62,25 @@ public class HomeFragement extends Fragment {
         args.putString(ARG_UID, UID);
 
         fragment.setArguments(args);
-
+        fragment.getActivity();
         return fragment;
     }
 
     private void initView() {
         lvImageList = rootView.findViewById(R.id.lv_image_lsit);
-        lvImageList.setAdapter(ImgAdapter);
-    }
+        lvImageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG,"HELLO");
+            }
+        });
 
+
+    }
+    private void LoadImageData() {
+
+        getAsyn();
+    }
 
 
     private Callback Loadcallback = new Callback() {
@@ -77,20 +90,27 @@ public class HomeFragement extends Fragment {
 
 
             final String body = response.body().string();
+
             if(response.isSuccessful()){
-               new Thread(new Runnable() {
-                   @Override
-                   public void run() {
-                       Log.d("debug", body);
-                       Gson gson = new Gson();
-                       //定义反序列化类型
-                       Type jsonType = new TypeToken<BaseResponse<Data>>(){}.getType();
-                       //解析
-                       BaseResponse<Data> dataResponse = gson.fromJson(body,jsonType);
+                if(activty ==null){
+                    Log.d(TAG,"null activty");
 
+                }
+                activty.runOnUiThread(() -> {
+                    Log.d(TAG,"callck");
+                    Log.d("debug", body);
+                    Gson gson = new Gson();
+                    //定义反序列化类型
+                    Type jsonType = new TypeToken<BaseResponse<Data>>(){}.getType();
+                    //解析
+                    BaseResponse<Data> dataResponse = gson.fromJson(body,jsonType);
+                    for(mImage mImg:dataResponse.getData().getRecords()){
 
-                   }
-               }).start();
+                        ImgAdapter.add(mImg);
+
+                    }
+                    ImgAdapter.notifyDataSetChanged();
+                });
 
             }
         }
@@ -105,21 +125,32 @@ public class HomeFragement extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        activty = getActivity();
         mId =  getArguments().getString(ARG_UID);
+
+    }
+
+    private void InitData() {
+        images = new ArrayList<>();
+        ImgAdapter = new ImageAdapter(rootView.getContext(),R.layout.list_image_item,images);
+        lvImageList.setAdapter(ImgAdapter);
+        Log.d(TAG,"InitDATA");
         LoadImageData();
     }
 
-    private void LoadImageData() {
 
-        getAsyn();
-    }
 
     private void getAsyn(){
         Map<String, Object> hmap;
         hmap = new HashMap<>();
         hmap.put("userId",mId);
-        getConnect(hmap,LoadUrl,Loadcallback);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getConnect(hmap,LoadUrl,Loadcallback);
+            }
+        }).start();
+
 
     }
 
@@ -131,6 +162,8 @@ public class HomeFragement extends Fragment {
                     container, 
                     false);
         }
+        initView();
+        InitData();
 
         // Inflate the layout for this fragment
         return rootView;

@@ -20,13 +20,14 @@ public class ImageAdapter extends ArrayAdapter<mImage> {
     private Context mContext;
     private int mId;
     private List<mImage> mImageList;
-    public ImageAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<mImage> images) {
-        super(context, resource, textViewResourceId, images);
+    public ImageAdapter(@NonNull Context context, int resource, @NonNull List<mImage> images) {
+        super(context, resource, images);
         this.mContext = context;
         this.mImageList = images;
-        this.mId = textViewResourceId;
+        this.mId = resource;
 
     }
+
 
     @SuppressLint("CheckResult")
     @NonNull
@@ -56,7 +57,7 @@ public class ImageAdapter extends ArrayAdapter<mImage> {
 
         vh.tvTitle.setText(img.getTitle());
         vh.tvUsername.setText(img.getpUserName());
-        vh.tvCreateTime.setText((int) img.getCreatetime());
+        vh.tvCreateTime.setText(String.valueOf(img.getCreatetime()));
         vh.tvImage.setTag(position);
         Glide.with(mContext).load(img.getImageUrlList().indexOf(0));
         return view;

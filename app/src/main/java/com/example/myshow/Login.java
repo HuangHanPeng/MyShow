@@ -153,8 +153,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     break;
                 }
                 FormBody formBody = new FormBody.Builder()
-                        .add("password", mUser.getmPassword())
                         .add("username", mUser.getmUserName())
+                        .add("password", mUser.getmPassword())
                         .build();
                 postConnect(formBody,LoginUrl,callback);
                 if(code == 500)

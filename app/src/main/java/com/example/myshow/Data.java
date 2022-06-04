@@ -18,5 +18,7 @@ public class Data extends JSONObject {
     public List<mImage> records;
 
 
-
+    public List<mImage> getRecords() {
+        return records;
+    }
 }
