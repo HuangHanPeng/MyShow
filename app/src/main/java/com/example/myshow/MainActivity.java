@@ -2,6 +2,7 @@ package com.example.myshow;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 import static com.example.myshow.Contants.LoginUrl;
+import static com.example.myshow.Contants.TAKE_PHOTO;
 import static com.example.myshow.Contants.appId;
 import static com.example.myshow.Contants.appSecret;
 import static com.example.myshow.Contants.loginmsg;
@@ -11,14 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +43,8 @@ import android.widget.Toolbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.PhantomReference;
@@ -53,10 +62,11 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     ViewPager2 viewPager;
-    private LinearLayout t_home,t_collection,t_userpage,t_add;
+    private LinearLayout t_home,t_collection,t_userpage;
     private ImageView ivhome,ivcollection,ivuser,ivCurrent;
 
     private user mUser = new user();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,11 +87,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.NewPhoto:
-                Toast.makeText(this,"hello",Toast.LENGTH_LONG).show();
+                Intent tPhoto = new Intent(MainActivity.this,postImage.class);
+                tPhoto.putExtra("pId",mUser.getmId());
+                startActivityForResult(tPhoto,TAKE_PHOTO);
                 break;
             default:
                 break;
@@ -89,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void setSupportActionBar(Toolbar toolbar) {
-    }
 
     private void initIamgeView() {
 
@@ -180,14 +192,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("debug", String.valueOf(requestCode));
         switch (requestCode){
             case 1:
-                mUser = (user) data.getSerializableExtra("user");
+                if(resultCode == RESULT_OK) {
+                    mUser = (user) data.getSerializableExtra("user");
 
-                Log.d("debug", "login sucessful!");
-                //主页面初始化
-                initPager();
-                //滑动页面联动
-                initIamgeView();
+                    Log.d("debug", "login sucessful!");
+                    //主页面初始化
+                    initPager();
+                    //滑动页面联动
+                    initIamgeView();
+                }
+                break;
+            case TAKE_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Toast.makeText(MainActivity.this,data.getStringExtra("msg"),Toast.LENGTH_LONG).show();
 
+                }
                 break;
             default:
                 break;

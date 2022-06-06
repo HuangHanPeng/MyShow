@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".postImage">
+
+
+
+    <LinearLayout
+        android:id="@+id/LLayout"
+        android:layout_width="409dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp"
+        tools:ignore="MissingConstraints">
+        <EditText
+            android:id="@+id/ptitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:layout_marginBottom="5dp"
+            android:hint="标题"
+            android:background="@color/white"
+            />
+            <EditText
+                android:id="@+id/MutilText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="22dp"
+                android:hint="@string/shareyourlife"
+                android:background="@color/white"
+                android:singleLine="false"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+    </LinearLayout>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_marginTop="200dp"
+        android:id="@+id/gridLayout"
+        android:layout_width="412dp"
+        android:layout_height="367dp"
+        tools:ignore="MissingConstraints"
+        android:layout_gravity="center_vertical"
+        tools:layout_editor_absoluteY="200dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/AddPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/whitesmoke"
+                android:src="@android:drawable/ic_menu_camera" />
+        </androidx.cardview.widget.CardView>
+    </androidx.gridlayout.widget.GridLayout>
+</RelativeLayout>

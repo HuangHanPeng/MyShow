@@ -8,12 +8,6 @@
         android:layout_height="200dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/tvimage"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/image_gray" />
-
         <TextView
             android:id="@+id/staticTitle"
             android:layout_width="wrap_content"
@@ -39,7 +33,7 @@
             android:id="@+id/staticName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="9dp"
             android:layout_marginTop="50dp"
 
 
@@ -74,6 +68,13 @@
             android:layout_height="1dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray" />
+            android:background="@color/whitesmoke" />
+
+        <ImageView
+            android:id="@+id/tvimage"
+            android:layout_width="99dp"
+            android:layout_height="102dp"
+            android:src="@drawable/image_gray" />
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>

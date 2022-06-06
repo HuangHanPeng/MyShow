@@ -2,6 +2,7 @@ package com.example.myshow;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 import static com.example.myshow.Contants.LoginUrl;
+import static com.example.myshow.Contants.NETWORK_CRASH;
 import static com.example.myshow.Contants.loginmsg;
 import static com.example.myshow.Contants.postConnect;
 
@@ -39,7 +40,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private int code = 0;
     private String msg = "";
     private user mUser;
-    private String id;
+    private long id;
     private String sex;
     private String introduce;
 
@@ -84,7 +85,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     //解析用户数据
                     data = object.getJSONObject("data");
 
-                    id = data.getString("id");
+                    id = data.getLong("id");
 
                     sex = data.getString("sex");
 
@@ -102,6 +103,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                 } catch (JSONException e) {
                     Log.d(TAG,"wrong!");
+                    Toast.makeText(Login.this,NETWORK_CRASH,Toast.LENGTH_LONG);
                     e.printStackTrace();
                 }
                 Log.d(TAG, body);

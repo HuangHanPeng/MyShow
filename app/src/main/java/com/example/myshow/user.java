@@ -8,13 +8,13 @@ public class user implements Serializable {
     private String mSex = null;
     private String mIntroduce = null;
 
-    private String mId = null;
+    private long mId = 0;
 
     public void setSex(String sex){this.mSex = sex;}
 
     public void setmIntroduce(String introduce){this.mIntroduce = introduce;}
 
-    public void setmId(String id){this.mId = id;}
+    public void setmId(long id){this.mId = id;}
 
     public void setmUserName(String userName){
         this.mUserName = userName;
@@ -32,7 +32,7 @@ public class user implements Serializable {
         return mPassword;
     }
 
-    public String getmId(){ return  mId; }
+    public long getmId(){ return  mId; }
 
     public String getmSex(){ return mSex;}
 

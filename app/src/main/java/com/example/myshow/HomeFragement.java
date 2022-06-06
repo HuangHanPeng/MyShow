@@ -51,15 +51,15 @@ public class HomeFragement extends Fragment {
     private List<mImage> images;
     private ImageAdapter ImgAdapter;
     public FragmentActivity activty;
-    private String mId;
+    private long mId;
     public HomeFragement() {
         // Required empty public constructor
     }
 
-    public static HomeFragement newInstance(String UID) {
+    public static HomeFragement newInstance(long UID) {
         HomeFragement fragment = new HomeFragement();
         Bundle args = new Bundle();
-        args.putString(ARG_UID, UID);
+        args.putLong(ARG_UID, UID);
 
         fragment.setArguments(args);
         fragment.getActivity();
@@ -72,6 +72,8 @@ public class HomeFragement extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG,"HELLO");
+
+
             }
         });
 
@@ -126,7 +128,7 @@ public class HomeFragement extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activty = getActivity();
-        mId =  getArguments().getString(ARG_UID);
+        mId =  getArguments().getLong(ARG_UID);
 
     }
 

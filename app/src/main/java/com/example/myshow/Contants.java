@@ -1,12 +1,19 @@
 package com.example.myshow;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -14,6 +21,7 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -23,6 +31,9 @@ import okhttp3.Response;
  **/
 public final class Contants {
 
+    public static final int CHOOSE_PHOTO = 3;
+    public static final int TAKE_PHOTO = 2;
+    public final static String NETWORK_CRASH = "网络连接出错";
     public final static String TAG = "debug";
     public static final String loginmsg = "用户名或密码不能为空！";
     //通用的url地址
@@ -32,8 +43,8 @@ public final class Contants {
     public static final String login = "user/login";
     public static final String sign = "user/register";
     public static final String Load = "share";
-
-
+    public static final String pFile = "image/upload";
+    public static final String Publish = "share/add";
     //请求头添加
     public static String appId = "cb56ce0d2dad4ac5831e37e6d999bc7f";
     public static String appSecret = "95194c6e29a67fe0e4b478538115326986110";
@@ -43,6 +54,8 @@ public final class Contants {
     public static final String LoginUrl = usrurl + login;
     public static final String signUrl = usrurl + sign;
     public static final String LoadUrl = usrurl + Load;
+    public static final String PFileUrl = usrurl + pFile;
+    public static final String PublishUrl = usrurl + Publish;
 
 
 
@@ -101,6 +114,31 @@ public final class Contants {
 
 
     }
+
+    public static void postFile(String url, List<File> files, Callback callback){
+
+        MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        if(files!=null){
+            for(int i = 0; i<files.size(); i++){
+                RequestBody body = RequestBody.create(MediaType.parse("image/jpg"),files.get(i));
+                requestBody.addFormDataPart("fileList","outputImage" + String.valueOf(i+1),body);
+            }
+        }
+
+        Request request = new Request.Builder()
+                .addHeader("appId",appId)
+                .addHeader("appSecret",appSecret)
+                .url(url)
+                .post(requestBody.build())
+                .build();
+        try {
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static final String getRequestParams(Map<String, Object> params){
             StringBuffer sBuffer = new StringBuffer("?");
             int i = 0;
@@ -122,5 +160,9 @@ public final class Contants {
             }
 
     }
+
+
+
+
 
 }
