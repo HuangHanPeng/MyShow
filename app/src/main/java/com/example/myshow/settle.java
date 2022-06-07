@@ -14,9 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.InetAddresses;
@@ -62,12 +64,13 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
     private EditText inputName,inputIndroduce;
     private View mSave;
     private String Imagepath = null;
-    private String msex;
-    private String mname;
-    private String indroduce;
     private List<File> fileList;
     private String imageUrl = null;
-    private long mid;
+
+    private LocalSQLite mySQL;
+    private SQLiteDatabase myDb;
+    private user mUser;
+
     public static final String staUrl = "https://guet-lab.oss-cn-guangzhou.aliyuncs.com/api/2022/06/07/outputImage1debug";
 
     //初始化数据；
@@ -75,12 +78,14 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setlayout);
+        mySQL = new LocalSQLite(settle.this);
+        myDb = mySQL.getWritableDatabase();
+        Cursor cursor = myDb.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
         Intent getintent = getIntent();
-        mname = getintent.getStringExtra("username");
-        msex = getintent.getStringExtra("sex");
-        indroduce = getintent.getStringExtra("indroduce");
-        Imagepath = getintent.getStringExtra("ImagePath");
-        mid = getintent.getLongExtra("UID",0);
+
+        mUser = new user();
+        mUser.setmId(getintent.getLongExtra("UID",0));
+        UserContract.getUserData(cursor,mUser);
         initData();
     }
 
@@ -131,11 +136,11 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                 switch (checkedId){
                     case R.id.smale:
                         Log.d(TAG, "male");
-                        msex = "0";
+                        mUser.setmSex(0);
                         break;
                     case R.id.sfale:
                         Log.d(TAG, "fmale");
-                        msex = "1";
+                        mUser.setmSex(1);
                         break;
                     default:
                         break;
@@ -169,7 +174,7 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                 imagePath = uri.getPath();
             }
         }
-        Imagepath = imagePath;
+
 
         displayImage(imagePath,picture);
     }
@@ -177,7 +182,6 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
     //图片显示
     private void displayImage(String imagePath,ImageView picture) {
         if(imagePath!=null){
-            fileList.add(new File(imagePath));
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             picture.setImageBitmap(bitmap);
         }else{
@@ -235,8 +239,12 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
 
                         ReFileData resData = baseResponse.getData();
 
-                        if(EmptyUtils.isNotEmpty(resData))
+                        if(EmptyUtils.isNotEmpty(resData)){
                             imageUrl = resData.getImageUrlList().get(0);
+                            mUser.setmAvatar(imageUrl);
+                        }
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -292,9 +300,9 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                 //按下保存按键发起修改请求
                 Log.d(TAG, "onClick: push");
                 if(EmptyUtils.isNotEmpty(inputName.getText().toString()))
-                    mname = inputName.getText().toString();
+                    mUser.setmUserName(inputName.getText().toString());
                 if(EmptyUtils.isNotEmpty(inputIndroduce.getText().toString()))
-                    indroduce = inputIndroduce.getText().toString();
+                    mUser.setmIntroduce(inputIndroduce.getText().toString());
                 try {
 
                     boolean res1 = push();
@@ -331,19 +339,19 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                         BaseResponse<ReFileData> baseResponse = gson.fromJson(body,jsonType);
                         //取出结果申请结果
                         int code = baseResponse.getCode();
-                        Log.d(TAG,String.valueOf(code));
-                        if(code != 200) {
-                           msg = "保存失败";
-                        }else {
-                            msg = "保存成功";
+                        msg = baseResponse.getMsg();
+                        Log.d(TAG,body);
+                        if(msg == null) {
+                            if (code != 200) {
+                                msg = "保存失败";
+                            } else {
+                                msg = "保存成功";
+                                ContentValues values = new ContentValues();
+                                UserContract.upUserData(values, mUser, myDb);
+                            }
                         }
-
                         //返回上个页面
                         Intent res = new Intent(settle.this, UserPage.class);
-                        res.putExtra("username",mname);
-                        res.putExtra("sex",msex);
-                        res.putExtra("indroduce",indroduce);
-                        res.putExtra("ImagePath",Imagepath);
                         res.putExtra("msg",msg);
                         res.putExtra("code",code);
                         res.putExtra("back",1);
@@ -368,11 +376,14 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
         }else {
             return false;
         }
+        if(EmptyUtils.isEmpty(mUser.getmSex())){
+            mUser.setmSex(0);
+        }
         //请求参数为json格式
-        jsonObject.put("introduce",indroduce);
-        jsonObject.put("sex",msex);
-        jsonObject.put("username",mname);
-        jsonObject.put("id",mid);
+        jsonObject.put("introduce",mUser.getmIntroduce());
+        jsonObject.put("sex",mUser.getmSex());
+        jsonObject.put("username",mUser.getmUserName());
+        jsonObject.put("id",mUser.getmId());
         Log.d(TAG, jsonObject.toString());
         postConnect(jsonObject.toString(),PubAheadUrl,Acallback);
         return true;

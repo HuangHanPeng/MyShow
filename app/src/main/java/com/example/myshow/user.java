@@ -5,12 +5,27 @@ import java.io.Serializable;
 public class user implements Serializable {
     private String mUserName = null;
     private String mPassword = null;
-    private String mSex = null;
+    private int mSex;
+    private String mAdmin = null;
     private String mIntroduce = null;
-
+    private String mAvatar = null;
     private long mId = 0;
 
+    public void setmAdmin(String mAdmin) {
+        this.mAdmin = mAdmin;
+    }
 
+    public String getmAdmin() {
+        return mAdmin;
+    }
+
+    public void setmAvatar(String mAvatar) {
+        this.mAvatar = mAvatar;
+    }
+
+    public String getmAvatar() {
+        return mAvatar;
+    }
 
     public void setmIntroduce(String introduce){this.mIntroduce = introduce;}
 
@@ -34,13 +49,13 @@ public class user implements Serializable {
 
     public long getmId(){ return  mId; }
 
-    public String getmSex(){ return mSex;}
+    public int getmSex(){ return mSex;}
 
     String getmIntroduce(){
         return mIntroduce;
     }
 
-    public void setmSex(String mSex) {
+    public void setmSex(int mSex) {
         this.mSex = mSex;
     }
 

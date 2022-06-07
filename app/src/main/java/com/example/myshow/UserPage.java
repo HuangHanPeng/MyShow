@@ -1,9 +1,15 @@
 package com.example.myshow;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
+
+import static com.example.myshow.UserContract.getUserData;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -39,12 +45,10 @@ public class UserPage extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "UID";
-    private static final String ARG_PARAM2 = "UNAME";
-    private static final String ARG_PARAM3 = "SEX";
-    private static final String ARG_PARAM4 = "INRODUCE";
     private  View rootView = null;
     private String imagepath = null;
-
+    private LocalSQLite mySql;
+    private SQLiteDatabase mydab;
     private TextView myName,myInroduce;
     private ImageView mySex,myavatar;
     private user mUser;
@@ -62,14 +66,11 @@ public class UserPage extends Fragment {
      * @return A new instance of fragment UserPage.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserPage newInstance(long uid,String uName,String sex, String introduce) {
+    public static UserPage newInstance(long id) {
         UserPage fragment = new UserPage();
         Bundle args = new Bundle();
-        args.putLong(ARG_PARAM1, uid);
-        args.putString(ARG_PARAM2,uName);
-        args.putString(ARG_PARAM3,sex);
-        args.putString(ARG_PARAM4,introduce);
-
+        args.putLong(ARG_PARAM1,id);
+        Log.d(TAG, "Fragment"+String.valueOf(id));
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,10 +89,6 @@ public class UserPage extends Fragment {
             case R.id.settle:
                 Intent sIntent = new Intent(getActivity(),settle.class);
                 sIntent.putExtra("UID",mUser.getmId());
-                sIntent.putExtra("username",mUser.getmUserName());
-                sIntent.putExtra("sex",mUser.getmSex());
-                sIntent.putExtra("indroduce",mUser.getmIntroduce());
-                sIntent.putExtra("ImagePath",imagepath);
                 startActivityForResult(sIntent,1);
                 break;
                 case R.id.cancel:
@@ -111,6 +108,13 @@ public class UserPage extends Fragment {
             case 1:
                 if(resultCode == RESULT_OK)
                 {
+
+                    int code = data.getIntExtra("code",-1);
+                    String msg = data.getStringExtra("msg");
+                    int back = data.getIntExtra("back",0);
+                    Log.d(TAG, "back = " + back);
+                    if(back == 1)
+                        Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
                     reViewUser();
                 }
                 break;
@@ -119,16 +123,22 @@ public class UserPage extends Fragment {
         }
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mUser = new user();
+        mySql = new LocalSQLite(getActivity());
+        mydab = mySql.getReadableDatabase();
         if (getArguments() != null) {
-            mUser.setmId(getArguments().getLong(ARG_PARAM1));
-            mUser.setmUserName(getArguments().getString(ARG_PARAM2));
-            mUser.setmSex(getArguments().getString(ARG_PARAM3));
-            mUser.setmIntroduce(getArguments().getString(ARG_PARAM4));
+            long uid = getArguments().getLong(ARG_PARAM1);
+            Log.d(TAG, "muid"+String.valueOf(uid));
+            mUser.setmId(uid);
+            Cursor cursor = mydab.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
+            getUserData(cursor,mUser);
+            Log.d(Contants.TAG, "username = " + mUser.getmUserName());
         }
 
     }
@@ -162,17 +172,19 @@ public class UserPage extends Fragment {
 
 
     private void reViewUser(){
+        Cursor cursor = mydab.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
+        getUserData(cursor,mUser);
         if(EmptyUtils.isNotEmpty(mUser.getmUserName()))
             myName.setText(mUser.getmUserName());
         if(EmptyUtils.isNotEmpty(mUser.getmSex())) {
-            String sexl = mUser.getmSex();
-            if(sexl.equals("1")) mySex.setSelected(false);
+            int sexl = mUser.getmSex();
+            if(sexl == 1) mySex.setSelected(false);
             else mySex.setSelected(true);
         }
         if(EmptyUtils.isNotEmpty(mUser.getmIntroduce())){
             myInroduce.setText(mUser.getmIntroduce());
         }
-        displayImage(imagepath,myavatar);
+        displayImage(mUser.getmAvatar(),myavatar);
 
     }
 

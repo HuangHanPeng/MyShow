@@ -17,8 +17,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -64,15 +67,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ViewPager2 viewPager;
     private LinearLayout t_home,t_collection,t_userpage;
     private ImageView ivhome,ivcollection,ivuser,ivCurrent;
-
+    private LocalSQLite mySql;
     private user mUser = new user();
-
+    private ContentValues userValues;
+    private SQLiteDatabase mydb;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mySql = new LocalSQLite(MainActivity.this);
+        mydb = mySql.getWritableDatabase();
+        userValues = new ContentValues();
         loginsys();
         Log.d("debug", "onCreate: iniPager");
 
@@ -142,8 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         **/
             fragments.add(HomeFragement.newInstance(mUser.getmId()));
             fragments.add(HomeFragement.newInstance(mUser.getmId()));
-            fragments.add(UserPage.newInstance(mUser.getmId(),mUser.getmUserName(),mUser.getmSex(),mUser.getmIntroduce()));
-            Log.d("debug", String.valueOf(mUser.getmId()));
+            fragments.add(UserPage.newInstance(mUser.getmId()));
 
         //创建了Fragment适配器
         ViewPagerFragmentAdapter viewPagerAdapter
@@ -199,7 +204,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode){
             case 1:
                 if(resultCode == RESULT_OK) {
+                    boolean tag = false;
                     mUser = (user) data.getSerializableExtra("user");
+                    if(EmptyUtils.isNotEmpty(mUser.getmAvatar())){
+                        mUser.setmAvatar("null");
+                    }
+                    Cursor cursor = mydb.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
+                    int uidIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_NAME_UID);
+                    while (cursor.moveToFirst()){
+                        if(mUser.getmId() == cursor.getLong(uidIndex)){
+                            Log.d(TAG, "id = " + String.valueOf(cursor.getLong(uidIndex)));
+                            tag = true;
+                            break;
+                        }
+                    }
+                    cursor.close();
+                    //不是第一次登录，保存在数据库中
+                    if(!tag){
+                        Log.d(TAG,  "save");
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_UID,mUser.getmId());
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_USERNAME,mUser.getmUserName());
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_SEX,mUser.getmSex());
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_INDRODUCE,mUser.getmIntroduce());
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_AVATAR,mUser.getmAvatar());
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_PASSWORD,mUser.getmPassword());
+                        userValues.put(UserContract.UserEntry.COLUMN_NAME_ADMIN,mUser.getmUserName());
+                        long r = mydb.insert(
+                                UserContract.UserEntry.TABLE_NAME,
+                                null,
+                                userValues
+                        );
+
+                        mydb.close();
+                    }
+
 
                     Log.d("debug", "login sucessful!");
                     //主页面初始化

@@ -41,9 +41,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private String msg = "";
     private user mUser;
     private long id;
-    private String sex;
+    private int sex;
     private String introduce;
-
+    private String avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,22 +80,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     JSONObject object = new JSONObject(body);
                     JSONObject data;
                     code = object.getInt("code");
-
                     msg = object.getString("msg");
                     //解析用户数据
                     data = object.getJSONObject("data");
-
                     id = data.getLong("id");
+                    String sexres = String.valueOf(data.getString("sex"));
+                    if(EmptyUtils.isEmpty(sexres)) sex = 0;
+                    else{
+                        if(sexres == "1") sex = 1;
+                        else sex = 0;
 
-                    data.getString("sex");
-                    data.getString("sex");
-
-                    sex = data.getString("sex");
-
+                    }
                     introduce = data.getString("introduce");
+                    avatar = data.getString("avatar");
                     mUser.setmId(id);
                     mUser.setmSex(sex);
                     mUser.setmIntroduce(introduce);
+                    mUser.setmAvatar(avatar);
 
                     Intent nIntent = new Intent(Login.this,MainActivity.class);
                     nIntent.putExtra("user", mUser);
