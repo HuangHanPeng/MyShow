@@ -10,7 +10,7 @@ public class user implements Serializable {
 
     private long mId = 0;
 
-    public void setSex(String sex){this.mSex = sex;}
+
 
     public void setmIntroduce(String introduce){this.mIntroduce = introduce;}
 
@@ -36,5 +36,13 @@ public class user implements Serializable {
 
     public String getmSex(){ return mSex;}
 
-    private String getmIntroduce(){return mIntroduce;}
+    String getmIntroduce(){
+        return mIntroduce;
+    }
+
+    public void setmSex(String mSex) {
+        this.mSex = mSex;
+    }
+
+
 }

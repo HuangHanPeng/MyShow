@@ -87,11 +87,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                     id = data.getLong("id");
 
+                    data.getString("sex");
+                    data.getString("sex");
+
                     sex = data.getString("sex");
 
                     introduce = data.getString("introduce");
                     mUser.setmId(id);
-                    mUser.setSex(sex);
+                    mUser.setmSex(sex);
                     mUser.setmIntroduce(introduce);
 
                     Intent nIntent = new Intent(Login.this,MainActivity.class);
@@ -103,7 +106,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                 } catch (JSONException e) {
                     Log.d(TAG,"wrong!");
-                    Toast.makeText(Login.this,NETWORK_CRASH,Toast.LENGTH_LONG);
                     e.printStackTrace();
                 }
                 Log.d(TAG, body);

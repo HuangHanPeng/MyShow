@@ -2,10 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id = "@+id/cancel"
-        android:icon = "@android:drawable/ic_menu_close_clear_cancel"
-        android:title = "NewPhoto"
+        android:id = "@+id/settle"
+        android:icon="@drawable/settle"
         app:showAsAction="always"
-        />
-
+        android:title="设置" />
 </menu>

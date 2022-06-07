@@ -4,8 +4,9 @@
     >
     <item
         android:id = "@+id/NewPhoto"
-        android:icon = "@drawable/ic_action_name"
+        android:icon = "@drawable/ic_action_addtion"
         android:title = "NewPhoto"
         app:showAsAction = "always"
         />
+
 </menu>

@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tPhoto.putExtra("pId",mUser.getmId());
                 startActivityForResult(tPhoto,TAKE_PHOTO);
                 break;
+
+            case R.id.settle:
+                return false;
+
+            case R.id.cancel:
+                return false;
             default:
                 break;
         }
@@ -136,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         **/
             fragments.add(HomeFragement.newInstance(mUser.getmId()));
             fragments.add(HomeFragement.newInstance(mUser.getmId()));
-            fragments.add(HomeFragement.newInstance(mUser.getmId()));
+            fragments.add(UserPage.newInstance(mUser.getmId(),mUser.getmUserName(),mUser.getmSex(),mUser.getmIntroduce()));
             Log.d("debug", String.valueOf(mUser.getmId()));
 
         //创建了Fragment适配器

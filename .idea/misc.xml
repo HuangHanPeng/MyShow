@@ -3,22 +3,29 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2335" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2335" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/drawable/sexselect.xml" value="0.2335" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/drawable/tab_collectionlist.xml" value="0.232" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/drawable/tab_home.xml" value="0.232" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/drawable/tab_userpage.xml" value="0.232" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/activity_main.xml" value="0.2526041666666667" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/activity_post_image.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/activity_settle.xml" value="0.24010416666666667" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/activity_sign.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/bottom.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/fragment_collect_page.xml" value="0.4244791666666667" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/fragment_home_fragement.xml" value="0.264" />
-        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/fragment_user_page.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/fragment_user_page.xml" value="0.264" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/list_image_item.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/list_photo_item.xml" value="0.72" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/setlayout.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/layout/toolbar.xml" value="0.24114583333333334" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/menu/mtoolbar.xml" value="0.3385416666666667" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/menu/toolbar.xml" value="0.3385416666666667" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/menu/toolbarphoto.xml" value="0.27239583333333334" />
+        <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/menu/tooluserbar.xml" value="0.22708333333333333" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/xml/file_paths.xml" value="0.14402173913043478" />
         <entry key="..\:/AndroidStudioProject/MyShow/app/src/main/res/xml/network_security_config.xml" value="0.2526041666666667" />
       </map>

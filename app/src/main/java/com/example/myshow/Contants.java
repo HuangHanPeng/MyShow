@@ -45,6 +45,7 @@ public final class Contants {
     public static final String Load = "share";
     public static final String pFile = "image/upload";
     public static final String Publish = "share/add";
+    public static final String pAhead = "user/update";
     //请求头添加
     public static String appId = "cb56ce0d2dad4ac5831e37e6d999bc7f";
     public static String appSecret = "95194c6e29a67fe0e4b478538115326986110";
@@ -56,7 +57,7 @@ public final class Contants {
     public static final String LoadUrl = usrurl + Load;
     public static final String PFileUrl = usrurl + pFile;
     public static final String PublishUrl = usrurl + Publish;
-
+    public static final String PubAheadUrl = usrurl + pAhead;
 
 
     //postConnect方法，用于申请post请求，传入表单数据，以及请求url，和功能使用的回调函数

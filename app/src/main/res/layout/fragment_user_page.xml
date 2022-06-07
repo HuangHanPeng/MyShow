@@ -1,11 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserPage">
 
-    <!-- TODO: Update blank fragment layout -->
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="364dp"
+
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="56dp"
+            tools:src="@drawable/u3" />
+
+
+
+        <ImageView
+            android:id="@+id/sexlabel"
+            android:layout_width="21dp"
+            android:layout_height="24dp"
+            android:src="@drawable/male"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="206dp" />
+
+        <TextView
+            android:id="@+id/uName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            android:hint="null"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="194dp"
+            tools:layout_editor_absoluteY="211dp" />
+
+
+        <TextView
+            android:id="@+id/introduce"
+            android:layout_width="235dp"
+            android:layout_height="34dp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:hint="null"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="88dp"
+            tools:layout_editor_absoluteY="254dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
