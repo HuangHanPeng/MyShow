@@ -2,41 +2,49 @@ package com.example.myshow;
 
 import static android.content.ContentValues.TAG;
 import static com.example.myshow.Contants.CHOOSE_PHOTO;
-import static com.example.myshow.Contants.Load;
+
 import static com.example.myshow.Contants.PFileUrl;
 import static com.example.myshow.Contants.PublishUrl;
-import static com.example.myshow.Contants.TAKE_PHOTO;
-import static com.example.myshow.Contants.appId;
-import static com.example.myshow.Contants.appSecret;
+
 import static com.example.myshow.Contants.postConnect;
 import static com.example.myshow.Contants.postFile;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+
+import android.app.Dialog;
 import android.content.ContentUris;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.InetAddresses;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.JsonReader;
+
 import android.util.Log;
+
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.MenuItem;
 import android.view.View;
+
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -70,7 +78,7 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
     private EditText MutlText,pTitle;
     private ImageView AddPhotos;
     private String mContent = "new share";
-    private Uri imageUri;
+    private Uri imageUri = null;
     private File outputImage;
     private String pushTitle = "new";
     private long imageCode;
@@ -80,7 +88,7 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
     private Intent resIntent;
     private int code = -1;
     private String msg;
-
+    private Dialog mydialog;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,8 +208,18 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
                     mContent = MutlText.getText().toString();
                 if(EmptyUtils.isNotEmpty(pTitle.getText().toString()))
                     pushTitle = pTitle.getText().toString();
-                publish();
+
+                if(imageUri != null){
+                    Log.d(TAG, "发布");
+                    publish();
+
+                }else {
+                    Toast.makeText(postImage.this,"不能上传空图像",Toast.LENGTH_LONG).show();
+                }
+
                 break;
+            case R.id._return:
+                mResIntent(-1,"取消");
             default:
                 break;
         }
@@ -222,39 +240,79 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
 
     }
 
+
+
     private void oporation() {
         AddPhotos.setOnClickListener(this);
 
     }
 
+    void setDialog(){
+
+        Window window = mydialog.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        Display defaultDisplay = getWindowManager().getDefaultDisplay();
+        lp.width = (int) (defaultDisplay.getWidth() * 0.7);
+        window.setAttributes(lp);
+    }
     private void initView() {
         MutlText = findViewById(R.id.MutilText);
         AddPhotos = findViewById(R.id.AddPhotos);
         pTitle = findViewById(R.id.ptitle);
+        mydialog = new Dialog(this,R.style.MyDialog);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog,null);
+        View btn_cancel =  dialogView.findViewById(R.id._cancel);
+        btn_cancel.setOnClickListener(this);
+        View btn_album = dialogView.findViewById(R.id._album);
+        btn_album.setOnClickListener(this);
+        View btn_photo = dialogView.findViewById(R.id._photo);
+        btn_photo.setOnClickListener(this);
+        mydialog.setContentView(dialogView);
 
     }
 
+    private void CheckPermissions(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                }
+            }
+        }
+
+    }
 
 
     @Override
     public void onClick(View v) {
 
         switch (v.getId()){
+            case R.id._cancel:
+                mydialog.dismiss();
+                break;
+            case R.id._photo:
+                CheckPermissions();
+                tokePhoto();
+                break;
+            case R.id._album:
+                CheckPermissions();
+                openAlbum();
+                break;
             case R.id.AddPhotos:
-                if (Build.VERSION.SDK_INT >= 23) {
-                    int REQUEST_CODE_CONTACT = 101;
-                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-                    //验证是否许可权限
-                    for (String str : permissions) {
-                        if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
-                            //申请权限
-                            this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
-                        }
-                    }
-                }
+
+                CheckPermissions();
 
                 //tokePhoto();
-                openAlbum();
+                //openAlbum();
+                mydialog.setCancelable(true);
+                mydialog.show();
+                setDialog();
                 break;
             default:
                 break;
@@ -316,10 +374,12 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
                         }
                         pushPlist.add(outputImage);
                         AddPhotos.setImageBitmap(bitmap);
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
+                mydialog.dismiss();
                 break;
             case CHOOSE_PHOTO:
                 if(resultCode == RESULT_OK){
@@ -329,6 +389,7 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
                         handleImageBeforeKitKat(data,AddPhotos);
                     }
                 }
+                mydialog.dismiss();
                 break;
             default:
                break;
@@ -418,4 +479,6 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
                 break;
         }
     }
+
+
 }
