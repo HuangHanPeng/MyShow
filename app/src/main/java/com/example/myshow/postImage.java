@@ -421,6 +421,7 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
                 imagePath = uri.getPath();
             }
         }
+        imageUri = uri;
         displayImage(imagePath,picture);
     }
 
@@ -437,6 +438,7 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
 
     private void handleImageBeforeKitKat(Intent data,ImageView picture){
         Uri uri = data.getData();
+        imageUri = uri;
         String imagePath = getImagePath(uri,null);
         displayImage(imagePath,picture);
     }

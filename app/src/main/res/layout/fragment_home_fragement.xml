@@ -7,17 +7,24 @@
     tools:context=".HomeFragement">
 
     <!-- TODO: Update blank fragment layout -->
-
-    <ListView
-        android:id="@+id/lv_image_lsit"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:divider="@color/gray2"
-        android:dividerHeight="2dp"
-        android:scrollbars="none"
+        android:id="@+id/srf1"
+        >
 
-        />
+        <ListView
+            android:id="@+id/lv_image_lsit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:divider="@drawable/divide"
+            android:dividerHeight="2dp"
+            android:scrollbars="none"
+
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 </LinearLayout>

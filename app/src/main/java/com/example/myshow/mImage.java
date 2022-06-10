@@ -1,13 +1,15 @@
 package com.example.myshow;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class mImage {
+public class mImage implements Comparable<mImage> {
     @SerializedName("id")
-    private long id;
+    private int id;
     @SerializedName("pUserId")
     private long pUserId;
     @SerializedName("imageCode")
@@ -88,7 +90,7 @@ public class mImage {
 
 
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -154,5 +156,10 @@ public class mImage {
         return title;
     }
 
+    @Override
+    public int compareTo(mImage o) {
+
+        return (int) (this.id - o.getId());
+    }
 }
 

@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     Cursor cursor = mydb.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
                     int uidIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_NAME_UID);
-                    while (cursor.moveToFirst()){
+                    while (cursor.moveToNext()){
                         if(mUser.getmId() == cursor.getLong(uidIndex)){
                             Log.d(TAG, "id = " + String.valueOf(cursor.getLong(uidIndex)));
                             tag = true;

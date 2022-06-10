@@ -5,17 +5,29 @@ import static com.example.myshow.Contants.TAG;
 import static com.example.myshow.Contants.getConnect;
 import static com.example.myshow.Contants.postConnect;
 
+import static java.util.Comparator.reverseOrder;
+
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -27,6 +39,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,12 +60,16 @@ public class HomeFragement extends Fragment {
     private static final String ARG_UID = "uId";
 
     private View rootView = null;
-
+    private int current_page = 1;
     private ListView lvImageList;
     private List<mImage> images;
     private ImageAdapter ImgAdapter;
     public FragmentActivity activty;
     private long mId;
+    private boolean addFlag = false;
+    private int count = 1;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     public HomeFragement() {
         // Required empty public constructor
     }
@@ -79,20 +97,23 @@ public class HomeFragement extends Fragment {
 
 
     }
-    private void LoadImageData() {
 
-        getAsyn();
+    //异步请求，加载分享数据
+    private void LoadImageData(int current) {
+
+        getAsyn(current);
     }
 
-
+    //异步请求的回调函数
     private Callback Loadcallback = new Callback() {
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
 
 
             final String body = response.body().string();
-
+            int id = 0;
             if(response.isSuccessful()){
                 if(activty ==null){
                     Log.d(TAG,"null activty");
@@ -106,12 +127,35 @@ public class HomeFragement extends Fragment {
                     Type jsonType = new TypeToken<BaseResponse<Data>>(){}.getType();
                     //解析
                     BaseResponse<Data> dataResponse = gson.fromJson(body,jsonType);
+                    boolean r = ImgAdapter.isEmpty();
+                    if(!r) count++;
                     for(mImage mImg:dataResponse.getData().getRecords()){
+                        Log.d(TAG, "add");
+                        if(dataResponse.getData().current == 1 && count > 1){
+                           if(mImg.getId() > ImgAdapter.getItem(0).getId()){
+                               Log.d(TAG,"id"+String.valueOf(mImg.getId()));
+                               Log.d(TAG, "id" + String.valueOf( ImgAdapter.getItem(0).getId()));
+                               ImgAdapter.add(mImg);
+                               ImgAdapter.sort(Comparator.reverseOrder());
+                               addFlag = true;
+                           }
+                        }else {
+                             addFlag = true;
+                             ImgAdapter.add(mImg);
+                        }
 
-                        ImgAdapter.add(mImg);
 
+                        Log.d(TAG,"current_page"+ String.valueOf(current_page));
                     }
-                    ImgAdapter.notifyDataSetChanged();
+                    for(int i=0;i<dataResponse.getData().total;i++){
+                        Log.d(TAG, "id" + String.valueOf(i) + "=" +
+                                String.valueOf(ImgAdapter.getItem(i).getId()));
+                    }
+                    if(addFlag) {
+                        ImgAdapter.notifyDataSetChanged();
+                        current_page = current_page + dataResponse.getData().current;
+                    }
+                    addFlag = false;
                 });
 
             }
@@ -134,18 +178,60 @@ public class HomeFragement extends Fragment {
 
     private void InitData() {
         images = new ArrayList<>();
+
         ImgAdapter = new ImageAdapter(rootView.getContext(),R.layout.list_image_item,images);
         lvImageList.setAdapter(ImgAdapter);
         Log.d(TAG,"InitDATA");
-        LoadImageData();
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.srf1);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(Color.WHITE);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.darker_gray);
+        LoadImageData(1);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                handler.sendEmptyMessageDelayed(199,1000);
+            }
+        });
+        lvImageList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState){
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        if(view.getLastVisiblePosition() == (view.getCount())-1){
+                                LoadImageData(current_page);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
     }
 
 
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
 
-    private void getAsyn(){
+            if(msg.what == 199){
+                getAsyn(1);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    };
+
+    private void getAsyn(int current){
         Map<String, Object> hmap;
         hmap = new HashMap<>();
         hmap.put("userId",mId);
+        hmap.put("current",current);
         new Thread(new Runnable() {
             @Override
             public void run() {

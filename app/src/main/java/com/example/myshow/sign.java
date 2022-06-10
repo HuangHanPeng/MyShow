@@ -28,6 +28,7 @@ public class sign extends AppCompatActivity {
     public String msg = "用户名已存在";
     private EditText _user;
     private EditText _psw;
+    private Intent intent;
     //注册功能回调实现
     Callback callback = new Callback() {
         @Override
@@ -45,7 +46,8 @@ public class sign extends AppCompatActivity {
                 code = object.getInt("code");
                 msg = object.getString("msg");
                 Log.d(Contants.TAG,msg);
-
+                setResult(RESULT_OK,intent);
+                finish();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -66,7 +68,7 @@ public class sign extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+                intent = new Intent();
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("password",_user.getText());
@@ -80,8 +82,7 @@ public class sign extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                setResult(RESULT_OK,intent);
-                finish();
+
             }
         });
 

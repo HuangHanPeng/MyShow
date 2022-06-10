@@ -2,6 +2,7 @@ package com.example.myshow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class ImageAdapter extends ArrayAdapter<mImage> {
+public class ImageAdapter extends ArrayAdapter<mImage>{
     private Context mContext;
     private int mId;
     private List<mImage> mImageList;
@@ -63,6 +64,7 @@ public class ImageAdapter extends ArrayAdapter<mImage> {
         Glide.with(mContext).load(img.getImageUrlList().get(0)).into(vh.tvImage);
         return view;
     }
+
 
     class ViewHolder{
 

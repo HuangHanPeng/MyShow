@@ -17,6 +17,13 @@ public class Data extends JSONObject {
     @SerializedName("records")
     public List<mImage> records;
 
+    public int getTotal() {
+        return total;
+    }
+
+    public int getSize() {
+        return size;
+    }
 
     public List<mImage> getRecords() {
         return records;
