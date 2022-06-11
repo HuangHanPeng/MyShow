@@ -1,11 +1,13 @@
 package com.example.myshow;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+import static com.example.myshow.Contants.LoadUrl;
 import static com.example.myshow.Contants.LoginUrl;
 import static com.example.myshow.Contants.TAKE_PHOTO;
 import static com.example.myshow.Contants.appId;
 import static com.example.myshow.Contants.appSecret;
 import static com.example.myshow.Contants.loginmsg;
+import static com.example.myshow.Contants.myShareUrl;
 import static com.example.myshow.Contants.postConnect;
 
 import androidx.annotation.NonNull;

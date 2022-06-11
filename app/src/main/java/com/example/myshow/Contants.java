@@ -43,6 +43,7 @@ public final class Contants {
     public static final String login = "user/login";
     public static final String sign = "user/register";
     public static final String Load = "share";
+    public static final String shareMyself = "share/myself";
     public static final String pFile = "image/upload";
     public static final String Publish = "share/add";
     public static final String pAhead = "user/update";
@@ -53,12 +54,18 @@ public final class Contants {
 
     //请求url地址
     public static final String LoginUrl = usrurl + login;
+    //注册的url
     public static final String signUrl = usrurl + sign;
+    //拉去图片分享列表
     public static final String LoadUrl = usrurl + Load;
+    //上传文件
     public static final String PFileUrl = usrurl + pFile;
+    //分享图片
     public static final String PublishUrl = usrurl + Publish;
+    //修改用户
     public static final String PubAheadUrl = usrurl + pAhead;
-
+    //我的发布列表
+    public static final String myShareUrl = usrurl + shareMyself;
 
     //postConnect方法，用于申请post请求，传入表单数据，以及请求url，和功能使用的回调函数
     public static final void postConnect(FormBody formBody, String url, Callback callback){

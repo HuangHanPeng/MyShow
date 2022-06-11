@@ -70,6 +70,7 @@ public class HomeFragement extends Fragment {
     private int count = 1;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
     public HomeFragement() {
         // Required empty public constructor
     }
@@ -120,7 +121,6 @@ public class HomeFragement extends Fragment {
 
                 }
                 activty.runOnUiThread(() -> {
-                    Log.d(TAG,"callck");
                     Log.d("debug", body);
                     Gson gson = new Gson();
                     //定义反序列化类型
@@ -129,28 +129,21 @@ public class HomeFragement extends Fragment {
                     BaseResponse<Data> dataResponse = gson.fromJson(body,jsonType);
                     boolean r = ImgAdapter.isEmpty();
                     if(!r) count++;
-                    for(mImage mImg:dataResponse.getData().getRecords()){
-                        Log.d(TAG, "add");
-                        if(dataResponse.getData().current == 1 && count > 1){
-                           if(mImg.getId() > ImgAdapter.getItem(0).getId()){
-                               Log.d(TAG,"id"+String.valueOf(mImg.getId()));
-                               Log.d(TAG, "id" + String.valueOf( ImgAdapter.getItem(0).getId()));
-                               ImgAdapter.add(mImg);
-                               ImgAdapter.sort(Comparator.reverseOrder());
-                               addFlag = true;
-                           }
-                        }else {
-                             addFlag = true;
-                             ImgAdapter.add(mImg);
+                    if(dataResponse.getData() != null)
+                        for(mImage mImg:dataResponse.getData().getRecords()){
+
+                            if(dataResponse.getData().current == 1 && count > 1){
+                               if(mImg.getId() > ImgAdapter.getItem(0).getId()){
+                                   ImgAdapter.add(mImg);
+                                   ImgAdapter.sort(Comparator.reverseOrder());
+                                   addFlag = true;
+                               }
+                            }else {
+                                 addFlag = true;
+                                 ImgAdapter.add(mImg);
+                            }
+
                         }
-
-
-                        Log.d(TAG,"current_page"+ String.valueOf(current_page));
-                    }
-                    for(int i=0;i<dataResponse.getData().total;i++){
-                        Log.d(TAG, "id" + String.valueOf(i) + "=" +
-                                String.valueOf(ImgAdapter.getItem(i).getId()));
-                    }
                     if(addFlag) {
                         ImgAdapter.notifyDataSetChanged();
                         current_page = current_page + dataResponse.getData().current;

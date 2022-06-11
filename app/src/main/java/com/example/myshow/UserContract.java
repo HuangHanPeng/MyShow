@@ -38,7 +38,7 @@ public final class UserContract {
         int avaterIndex = cursor.getColumnIndex(UserEntry.COLUMN_NAME_AVATAR);
         int i = 0;
         String sexres;
-        while(cursor.moveToFirst()){
+        while(cursor.moveToNext()){
             if(mUser.getmId() == cursor.getLong(uidIndex)){
                 mUser.setmUserName(cursor.getColumnName(nameIndex));
                 sexres = cursor.getColumnName(sexIndex);
