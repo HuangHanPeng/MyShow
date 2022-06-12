@@ -4,6 +4,7 @@ import static com.example.myshow.Contants.CHOOSE_PHOTO;
 import static com.example.myshow.Contants.PFileUrl;
 import static com.example.myshow.Contants.PubAheadUrl;
 import static com.example.myshow.Contants.TAKE_PHOTO;
+import static com.example.myshow.Contants.login;
 import static com.example.myshow.Contants.postConnect;
 import static com.example.myshow.Contants.postFile;
 
@@ -71,7 +72,7 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
     private SQLiteDatabase myDb;
     private user mUser;
 
-    public static final String staUrl = "https://guet-lab.oss-cn-guangzhou.aliyuncs.com/api/2022/06/07/outputImage1debug";
+    public static final String staUrl = "https://guet-lab.oss-cn-guangzhou.aliyuncs.com/api/2022/06/07/outputImage1";
 
     //初始化数据；
     @Override
@@ -181,7 +182,9 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
 
     //图片显示
     private void displayImage(String imagePath,ImageView picture) {
+
         if(imagePath!=null){
+            fileList.add(new File(imagePath));
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             picture.setImageBitmap(bitmap);
         }else{
@@ -233,6 +236,7 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                     String body = null;
                     try {
                         body = response.body().string();
+                        Log.d(TAG, body);
                         Gson gson = new Gson();
                         Type jsonType = new TypeToken<BaseResponse<ReFileData>>(){}.getType();
                         BaseResponse<ReFileData> baseResponse = gson.fromJson(body,jsonType);
@@ -264,9 +268,11 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                 if(resultCode == RESULT_OK){
                     if(Build.VERSION.SDK_INT >= 19){
                         handleImageOnKitKat(data,head);
+                        if(!fileList.isEmpty())
                         postFile(PFileUrl,fileList,callback);
                     }else {
                         handleImageBeforeKitKat(data,head);
+                        if(!fileList.isEmpty())
                         postFile(PFileUrl,fileList,callback);
                     }
                 }

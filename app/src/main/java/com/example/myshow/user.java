@@ -10,9 +10,17 @@ public class user implements Serializable {
     private String mIntroduce = null;
     private String mAvatar = null;
     private long mId = 0;
-
+    private String sex;
     public void setmAdmin(String mAdmin) {
         this.mAdmin = mAdmin;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getSex() {
+        return sex;
     }
 
     public String getmAdmin() {

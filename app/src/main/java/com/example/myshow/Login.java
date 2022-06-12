@@ -79,6 +79,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                     JSONObject object = new JSONObject(body);
                     JSONObject data;
+                    Log.d(Contants.TAG, body);
                     code = object.getInt("code");
                     msg = object.getString("msg");
                     //解析用户数据
@@ -87,8 +88,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     String sexres = String.valueOf(data.getString("sex"));
                     if(EmptyUtils.isEmpty(sexres)) sex = 0;
                     else{
-                        if(sexres == "1") sex = 1;
-                        else sex = 0;
+                        if(sexres.equals("1") )
+                            sex = 1;
+                        else
+                            sex = 0;
 
                     }
                     introduce = data.getString("introduce");

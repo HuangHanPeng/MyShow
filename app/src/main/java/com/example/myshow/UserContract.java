@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 //定义合约类
 public final class UserContract {
+    private static final String TAG = "debug";
+
     private UserContract(){}
 
     public static class UserEntry implements BaseColumns{
@@ -23,7 +26,9 @@ public final class UserContract {
 
     public static void upUserData(ContentValues values, user mUser, SQLiteDatabase db){
         values.put(UserContract.UserEntry.COLUMN_NAME_USERNAME,mUser.getmUserName());
-        values.put(UserContract.UserEntry.COLUMN_NAME_SEX,mUser.getmSex());
+        Log.d(TAG, "更新的性别"+ String.valueOf(mUser.getmSex()));
+        values.put(UserContract.UserEntry.COLUMN_NAME_SEX,String.valueOf(mUser.getmSex()));
+
         values.put(UserContract.UserEntry.COLUMN_NAME_INDRODUCE,mUser.getmIntroduce());
         values.put(UserContract.UserEntry.COLUMN_NAME_AVATAR,mUser.getmAvatar());
         db.update(UserEntry.TABLE_NAME,values,"uid =?",new String[] {String.valueOf(mUser.getmId())});
@@ -40,17 +45,35 @@ public final class UserContract {
         String sexres;
         while(cursor.moveToNext()){
             if(mUser.getmId() == cursor.getLong(uidIndex)){
-                mUser.setmUserName(cursor.getColumnName(nameIndex));
-                sexres = cursor.getColumnName(sexIndex);
-                if(EmptyUtils.isEmpty(sexres)) mUser.setmSex(0);
+                Log.d(Contants.TAG, "当前id"+String.valueOf(mUser.getmId()));
+                Log.d(Contants.TAG, "对比id"+String.valueOf(mUser.getmId()));
+                mUser.setmUserName(cursor.getString(nameIndex));
+                Log.d(Contants.TAG, "名字"+String.valueOf(mUser.getmUserName()));
+                Log.d(TAG, cursor.getString(sexIndex));
+                sexres = cursor.getString(sexIndex);
+                if(EmptyUtils.isEmpty(sexres)) {
+
+                    mUser.setmSex(0);
+                    Log.d(TAG, "空性别");
+                }
+
                 else{
-                    if(sexres == "1") mUser.setmSex(1);
-                    else mUser.setmSex(0);
+                    if(sexres.equals("1"))
+                    {
+                        Log.d(TAG, "设置为1");
+                        mUser.setmSex(1);
+                    }
+                    else {
+                        mUser.setmSex(0);
+                        Log.d(TAG, "设置为0");
+                    }
+
 
                 }
 
-                mUser.setmIntroduce(cursor.getColumnName(indroduceIndex));
-                mUser.setmAvatar(cursor.getColumnName(avaterIndex));
+                mUser.setmIntroduce(cursor.getString(indroduceIndex));
+                Log.d(Contants.TAG, "介绍"+String.valueOf(mUser.getmIntroduce()));
+                mUser.setmAvatar(cursor.getString(avaterIndex));
                 break;
             }
             if(i == 200)

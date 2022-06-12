@@ -9,6 +9,7 @@ import static com.example.myshow.Contants.appSecret;
 import static com.example.myshow.Contants.loginmsg;
 import static com.example.myshow.Contants.myShareUrl;
 import static com.example.myshow.Contants.postConnect;
+import static com.example.myshow.UserContract.upUserData;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -208,9 +209,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(resultCode == RESULT_OK) {
                     boolean tag = false;
                     mUser = (user) data.getSerializableExtra("user");
-                    if(EmptyUtils.isNotEmpty(mUser.getmAvatar())){
-                        mUser.setmAvatar("null");
-                    }
+                    Log.d(TAG, "登录性别"+String.valueOf(mUser.getSex()));
+
+
                     Cursor cursor = mydb.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
                     int uidIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_NAME_UID);
                     while (cursor.moveToNext()){
@@ -238,6 +239,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         );
 
                         mydb.close();
+                    }else {
+                        ContentValues values = new ContentValues();
+                        upUserData(values,mUser,mydb);
+                        mydb.close();
+
                     }
 
 
@@ -251,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case TAKE_PHOTO:
                 if(resultCode == RESULT_OK){
                     Toast.makeText(MainActivity.this,data.getStringExtra("msg"),Toast.LENGTH_LONG).show();
+
 
                 }
                 break;

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -31,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.lang.ref.PhantomReference;
@@ -134,11 +137,10 @@ public class UserPage extends Fragment {
         mydab = mySql.getReadableDatabase();
         if (getArguments() != null) {
             long uid = getArguments().getLong(ARG_PARAM1);
-            Log.d(TAG, "muid"+String.valueOf(uid));
+
             mUser.setmId(uid);
             Cursor cursor = mydab.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
             getUserData(cursor,mUser);
-            Log.d(Contants.TAG, "username = " + mUser.getmUserName());
         }
 
     }
@@ -174,16 +176,28 @@ public class UserPage extends Fragment {
     private void reViewUser(){
         Cursor cursor = mydab.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
         getUserData(cursor,mUser);
-        if(EmptyUtils.isNotEmpty(mUser.getmUserName()))
+        if(EmptyUtils.isNotEmpty(mUser.getmUserName())){
+            Log.d(TAG,"username "+ mUser.getmUserName());
             myName.setText(mUser.getmUserName());
+        }
+
         if(EmptyUtils.isNotEmpty(mUser.getmSex())) {
             int sexl = mUser.getmSex();
-            if(sexl == 1) mySex.setSelected(false);
-            else mySex.setSelected(true);
+            Log.d(TAG, String.valueOf(sexl));
+            if(sexl == 1) {
+                mySex.setSelected(false);
+                Log.d(TAG, "fmale");
+            }
+            else {
+                mySex.setSelected(true);
+                Log.d(TAG, "male");
+            }
         }
         if(EmptyUtils.isNotEmpty(mUser.getmIntroduce())){
+            Log.d(TAG, "Introduce" + mUser.getmIntroduce());
             myInroduce.setText(mUser.getmIntroduce());
         }
+        Log.d(TAG, mUser.getmAvatar());
         displayImage(mUser.getmAvatar(),myavatar);
 
     }
@@ -193,6 +207,7 @@ public class UserPage extends Fragment {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             picture.setImageBitmap(bitmap);
         }else{
+            picture.setTag(R.drawable.u3);
             Toast.makeText(rootView.getContext(), "failed to get image", Toast.LENGTH_SHORT).show();
         }
 
