@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragment依赖MainActivity,画面渲染主要在layout_main
         **/
             fragments.add(HomeFragement.newInstance(mUser.getmId(),LoadUrl));
-            fragments.add(HomeFragement.newInstance(mUser.getmId(),shareMyself));
+            fragments.add(HomeFragement.newInstance(mUser.getmId(),myShareUrl));
             fragments.add(UserPage.newInstance(mUser.getmId()));
 
         //创建了Fragment适配器

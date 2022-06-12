@@ -228,8 +228,9 @@ public class HomeFragement extends Fragment {
 
         new Thread(new Runnable() {
             @Override
+
             public void run() {
-                getConnect(hmap,LoadUrl,Loadcallback);
+                getConnect(hmap,mUrl,Loadcallback);
             }
         }).start();
 
