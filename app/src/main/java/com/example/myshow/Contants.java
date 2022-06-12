@@ -129,7 +129,7 @@ public final class Contants {
         if(files!=null){
             for(int i = 0; i<files.size(); i++){
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpg"),files.get(i));
-                requestBody.addFormDataPart("fileList","outputImage" + String.valueOf(i+1),body);
+                requestBody.addFormDataPart("fileList","outputImage" + String.valueOf(i+1) + ".jpg",body);
             }
         }
 

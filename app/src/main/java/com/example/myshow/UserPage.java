@@ -204,10 +204,9 @@ public class UserPage extends Fragment {
 
     private void displayImage(String imagePath, ImageView picture) {
         if(imagePath!=null){
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            picture.setImageBitmap(bitmap);
+            Glide.with(rootView.getContext()).load(imagePath).into(picture);
         }else{
-            picture.setTag(R.drawable.u3);
+
             Toast.makeText(rootView.getContext(), "failed to get image", Toast.LENGTH_SHORT).show();
         }
 

@@ -9,6 +9,7 @@ import static com.example.myshow.Contants.appSecret;
 import static com.example.myshow.Contants.loginmsg;
 import static com.example.myshow.Contants.myShareUrl;
 import static com.example.myshow.Contants.postConnect;
+import static com.example.myshow.Contants.shareMyself;
 import static com.example.myshow.UserContract.upUserData;
 
 import androidx.annotation.NonNull;
@@ -149,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
             fragment依赖MainActivity,画面渲染主要在layout_main
         **/
-            fragments.add(HomeFragement.newInstance(mUser.getmId()));
-            fragments.add(HomeFragement.newInstance(mUser.getmId()));
+            fragments.add(HomeFragement.newInstance(mUser.getmId(),LoadUrl));
+            fragments.add(HomeFragement.newInstance(mUser.getmId(),shareMyself));
             fragments.add(UserPage.newInstance(mUser.getmId()));
 
         //创建了Fragment适配器

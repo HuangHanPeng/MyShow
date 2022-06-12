@@ -58,7 +58,7 @@ public class HomeFragement extends Fragment {
 
 
     private static final String ARG_UID = "uId";
-
+    private static final String ARG_URL = "url";
     private View rootView = null;
     private int current_page = 1;
     private ListView lvImageList;
@@ -69,17 +69,17 @@ public class HomeFragement extends Fragment {
     private boolean addFlag = false;
     private int count = 1;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private String mUrl;
 
     public HomeFragement() {
         // Required empty public constructor
     }
 
-    public static HomeFragement newInstance(long UID) {
+    public static HomeFragement newInstance(long UID,String url) {
         HomeFragement fragment = new HomeFragement();
         Bundle args = new Bundle();
         args.putLong(ARG_UID, UID);
-
+        args.putString(ARG_URL,url);
         fragment.setArguments(args);
         fragment.getActivity();
         return fragment;
@@ -166,7 +166,7 @@ public class HomeFragement extends Fragment {
         super.onCreate(savedInstanceState);
         activty = getActivity();
         mId =  getArguments().getLong(ARG_UID);
-
+        mUrl = getArguments().getString(ARG_URL);
     }
 
     private void InitData() {
@@ -225,6 +225,7 @@ public class HomeFragement extends Fragment {
         hmap = new HashMap<>();
         hmap.put("userId",mId);
         hmap.put("current",current);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
