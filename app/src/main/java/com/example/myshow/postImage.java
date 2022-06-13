@@ -250,13 +250,15 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
     void setDialog(){
 
         Window window = mydialog.getWindow();
-        window.setGravity(Gravity.BOTTOM);
+        WindowManager m = window.getWindowManager();
+        Display d = m.getDefaultDisplay();
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        Display defaultDisplay = getWindowManager().getDefaultDisplay();
-        lp.width = (int) (defaultDisplay.getWidth() * 0.7);
+        lp.width = (int) (d.getWidth() );
+        lp.height = (int) (d.getHeight());
+        lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
     }
+
     private void initView() {
         MutlText = findViewById(R.id.MutilText);
         AddPhotos = findViewById(R.id.AddPhotos);
@@ -354,24 +356,11 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
         switch (requestCode){
             case 1:
                 if(resultCode == RESULT_OK)
-                {   
-                    
+                {
                     try {
 
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver()
                                 .openInputStream(imageUri));
-                        postImage.this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                                imageUri));
-                        try {
-                            OutputStream outputStream = getContentResolver().openOutputStream(imageUri, "rw");
-                            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)) {
-                                Log.e("保存成功", "success");
-                            } else {
-                                Log.e("保存失败", "fail");
-                            }
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
                         pushPlist.add(outputImage);
                         AddPhotos.setImageBitmap(bitmap);
 

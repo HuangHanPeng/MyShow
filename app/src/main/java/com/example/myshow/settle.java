@@ -7,13 +7,17 @@ import static com.example.myshow.Contants.TAKE_PHOTO;
 import static com.example.myshow.Contants.login;
 import static com.example.myshow.Contants.postConnect;
 import static com.example.myshow.Contants.postFile;
+import static com.example.myshow.UserContract.upUserData;
+import static com.example.myshow.postImage.TakePs;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -30,9 +34,14 @@ import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -46,6 +55,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -67,11 +77,12 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
     private String Imagepath = null;
     private List<File> fileList;
     private String imageUrl = null;
-
+    private File outputImage;
     private LocalSQLite mySQL;
     private SQLiteDatabase myDb;
     private user mUser;
-
+    private Dialog mydialog;
+    private Uri imageUri;
     public static final String staUrl = "https://guet-lab.oss-cn-guangzhou.aliyuncs.com/api/2022/06/07/outputImage1";
 
     //初始化数据；
@@ -83,11 +94,20 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
         myDb = mySQL.getWritableDatabase();
         Cursor cursor = myDb.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
         Intent getintent = getIntent();
-
+        mydialog = new Dialog(this,R.style.MyDialog);
         mUser = new user();
         mUser.setmId(getintent.getLongExtra("UID",0));
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog,null);
+        View btn_cancel =  dialogView.findViewById(R.id._cancel);
+        btn_cancel.setOnClickListener(this);
+        View btn_album = dialogView.findViewById(R.id._album);
+        btn_album.setOnClickListener(this);
+        View btn_photo = dialogView.findViewById(R.id._photo);
+        btn_photo.setOnClickListener(this);
         UserContract.getUserData(cursor,mUser);
         initData();
+        mydialog.setContentView(dialogView);
+
     }
 
     //创建顶部菜单
@@ -269,16 +289,46 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                     if(Build.VERSION.SDK_INT >= 19){
                         handleImageOnKitKat(data,head);
                         if(!fileList.isEmpty())
-                        postFile(PFileUrl,fileList,callback);
+                            postFile(PFileUrl,fileList,callback);
                     }else {
                         handleImageBeforeKitKat(data,head);
                         if(!fileList.isEmpty())
-                        postFile(PFileUrl,fileList,callback);
+                            postFile(PFileUrl,fileList,callback);
                     }
+                    mydialog.dismiss();
                 }
+                break;
+            case TAKE_PHOTO:
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapFactory.decodeStream(getContentResolver()
+                            .openInputStream(imageUri));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                fileList.add(outputImage);
+                head.setImageBitmap(bitmap);
+                if(!fileList.isEmpty())
+                    postFile(PFileUrl,fileList,callback);
+                mydialog.dismiss();
                 break;
             default:
                 break;
+        }
+
+    }
+
+    void CheckPermissions(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                }
+            }
         }
 
     }
@@ -287,26 +337,16 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.setAvatar:
-
-                if (Build.VERSION.SDK_INT >= 23) {
-                    int REQUEST_CODE_CONTACT = 101;
-                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-                    //验证是否许可权限
-                    for (String str : permissions) {
-                        if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
-                            //申请权限
-                            this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
-                        }
-                    }
-                }
-                openAlbum();
+                mydialog.show();
+                setDialog();
                 Log.d(TAG, "onClick: openAlbum");
                 break;
             case R.id.saveMy:
                 //按下保存按键发起修改请求
                 Log.d(TAG, "onClick: push");
                 if(EmptyUtils.isNotEmpty(inputName.getText().toString()))
-                    mUser.setmUserName(inputName.getText().toString());
+                    mUser.setmAdmin(inputName.getText().toString());
+                Log.d(TAG, "当前admin" + mUser.getmAdmin());
                 if(EmptyUtils.isNotEmpty(inputIndroduce.getText().toString()))
                     mUser.setmIntroduce(inputIndroduce.getText().toString());
                 try {
@@ -314,15 +354,73 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                     boolean res1 = push();
                     if(!res1){
                         Toast.makeText(settle.this,"上传头像失败",Toast.LENGTH_LONG).show();
+
+                    }else {
+                        ContentValues values = new ContentValues();
+                        upUserData(values,mUser,myDb);
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id._cancel:
+                mydialog.dismiss();
+                break;
+            case R.id._photo:
+                CheckPermissions();
+                tokePhoto();
+                break;
+            case R.id._album:
+                CheckPermissions();
+                openAlbum();
                 break;
             default:
                 break;
         }
     }
+
+
+    private void tokePhoto(){
+
+        outputImage = new File(getExternalCacheDir(),
+                "output_image.jpg");
+
+        try{
+            if(outputImage.exists()){
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(Build.VERSION.SDK_INT >= 24){
+            imageUri = FileProvider.getUriForFile(settle.this,
+                    "com.example.cameraalbumtest.fileprovider",outputImage);
+        }else {
+            imageUri = Uri.fromFile(outputImage);
+        }
+
+
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+        startActivityForResult(intent,TAKE_PHOTO);
+
+    }
+
+    void setDialog(){
+
+        Window window = mydialog.getWindow();
+        WindowManager m = window.getWindowManager();
+        Display d = m.getDefaultDisplay();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = (int) (d.getWidth());
+        lp.height = (int) (d.getHeight());
+        lp.gravity = Gravity.BOTTOM;
+        window.setAttributes(lp);
+    }
+
 
 
     //修改用户请求回调
@@ -353,7 +451,8 @@ public class settle extends AppCompatActivity implements View.OnClickListener {
                             } else {
                                 msg = "保存成功";
                                 ContentValues values = new ContentValues();
-                                UserContract.upUserData(values, mUser, myDb);
+                                myDb = mySQL.getWritableDatabase();
+                                upUserData(values, mUser, myDb);
                             }
                         }
                         //返回上个页面

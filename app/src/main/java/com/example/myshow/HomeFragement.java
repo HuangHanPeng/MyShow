@@ -134,6 +134,7 @@ public class HomeFragement extends Fragment {
 
                             if(dataResponse.getData().current == 1 && count > 1){
                                if(mImg.getId() > ImgAdapter.getItem(0).getId()){
+                                   Log.d(TAG, "加载用户名" + mImg.getpUserName());
                                    ImgAdapter.add(mImg);
                                    ImgAdapter.sort(Comparator.reverseOrder());
                                    addFlag = true;
@@ -146,7 +147,8 @@ public class HomeFragement extends Fragment {
                         }
                     if(addFlag) {
                         ImgAdapter.notifyDataSetChanged();
-                        current_page = current_page + dataResponse.getData().current;
+                        current_page =  dataResponse.getData().current + 1;
+                        Log.d(TAG, "当前页"+String.valueOf(current_page));
                     }
                     addFlag = false;
                 });

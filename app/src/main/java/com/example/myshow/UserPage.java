@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 
 import static com.example.myshow.UserContract.getUserData;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,12 +23,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +60,7 @@ public class UserPage extends Fragment {
     private TextView myName,myInroduce;
     private ImageView mySex,myavatar;
     private user mUser;
+
     // TODO: Rename and change types of parameters
 
     public UserPage() {
@@ -176,8 +182,10 @@ public class UserPage extends Fragment {
     private void reViewUser(){
         Cursor cursor = mydab.query(UserContract.UserEntry.TABLE_NAME,null,null,null,null,null,null);
         getUserData(cursor,mUser);
-        if(EmptyUtils.isNotEmpty(mUser.getmUserName())){
-            Log.d(TAG,"username "+ mUser.getmUserName());
+        if(EmptyUtils.isNotEmpty(mUser.getmAdmin())){
+            myName.setText(mUser.getmAdmin());
+
+        }else {
             myName.setText(mUser.getmUserName());
         }
 
@@ -194,7 +202,6 @@ public class UserPage extends Fragment {
             }
         }
         if(EmptyUtils.isNotEmpty(mUser.getmIntroduce())){
-            Log.d(TAG, "Introduce" + mUser.getmIntroduce());
             myInroduce.setText(mUser.getmIntroduce());
         }
         Log.d(TAG, mUser.getmAvatar());
@@ -204,13 +211,17 @@ public class UserPage extends Fragment {
 
     private void displayImage(String imagePath, ImageView picture) {
         if(imagePath!=null){
-            Glide.with(rootView.getContext()).load(imagePath).into(picture);
+            Log.d(TAG, "当前url" + imagePath);
+            Context context = getActivity();
+
+            Glide.with(context).load(imagePath).into(picture);
         }else{
 
             Toast.makeText(rootView.getContext(), "failed to get image", Toast.LENGTH_SHORT).show();
         }
 
     }
+
 
 
 }

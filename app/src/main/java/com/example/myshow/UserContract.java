@@ -25,10 +25,9 @@ public final class UserContract {
 
 
     public static void upUserData(ContentValues values, user mUser, SQLiteDatabase db){
-        values.put(UserContract.UserEntry.COLUMN_NAME_USERNAME,mUser.getmUserName());
-        Log.d(TAG, "更新的性别"+ String.valueOf(mUser.getmSex()));
         values.put(UserContract.UserEntry.COLUMN_NAME_SEX,String.valueOf(mUser.getmSex()));
-
+        Log.d(TAG, "更新的用户名" +mUser.getmAdmin());
+        values.put(UserEntry.COLUMN_NAME_ADMIN,mUser.getmAdmin());
         values.put(UserContract.UserEntry.COLUMN_NAME_INDRODUCE,mUser.getmIntroduce());
         values.put(UserContract.UserEntry.COLUMN_NAME_AVATAR,mUser.getmAvatar());
         db.update(UserEntry.TABLE_NAME,values,"uid =?",new String[] {String.valueOf(mUser.getmId())});
@@ -41,41 +40,39 @@ public final class UserContract {
         int sexIndex = cursor.getColumnIndex(UserEntry.COLUMN_NAME_SEX);
         int indroduceIndex = cursor.getColumnIndex(UserEntry.COLUMN_NAME_INDRODUCE);
         int avaterIndex = cursor.getColumnIndex(UserEntry.COLUMN_NAME_AVATAR);
+        int adminIndex = cursor.getColumnIndex(UserEntry.COLUMN_NAME_ADMIN);
         int i = 0;
         String sexres;
+
         while(cursor.moveToNext()){
             if(mUser.getmId() == cursor.getLong(uidIndex)){
-                Log.d(Contants.TAG, "当前id"+String.valueOf(mUser.getmId()));
-                Log.d(Contants.TAG, "对比id"+String.valueOf(mUser.getmId()));
                 mUser.setmUserName(cursor.getString(nameIndex));
-                Log.d(Contants.TAG, "名字"+String.valueOf(mUser.getmUserName()));
-                Log.d(TAG, cursor.getString(sexIndex));
+                mUser.setmAdmin(cursor.getString(adminIndex));
                 sexres = cursor.getString(sexIndex);
                 if(EmptyUtils.isEmpty(sexres)) {
 
                     mUser.setmSex(0);
-                    Log.d(TAG, "空性别");
+
                 }
 
                 else{
                     if(sexres.equals("1"))
                     {
-                        Log.d(TAG, "设置为1");
+
                         mUser.setmSex(1);
                     }
                     else {
                         mUser.setmSex(0);
-                        Log.d(TAG, "设置为0");
+
                     }
 
 
                 }
-
                 mUser.setmIntroduce(cursor.getString(indroduceIndex));
-                Log.d(Contants.TAG, "介绍"+String.valueOf(mUser.getmIntroduce()));
                 mUser.setmAvatar(cursor.getString(avaterIndex));
                 break;
             }
+
             if(i == 200)
                 break;
 
