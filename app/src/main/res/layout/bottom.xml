@@ -49,6 +49,24 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:orientation="vertical"
+        android:id="@+id/sharepage">
+
+        <ImageView
+            android:id="@+id/myshare"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@drawable/tab_sharepage">
+
+        </ImageView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:orientation="vertical"
         android:id="@+id/userpage">
 
         <ImageView
@@ -60,11 +78,6 @@
 
         </ImageView>
     </LinearLayout>
-
-
-
-
-
 
 
 </LinearLayout>

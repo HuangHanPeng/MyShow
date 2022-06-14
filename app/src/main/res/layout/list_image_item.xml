@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+
              android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="horizontal">
+        android:layout_height="290dp"
+        android:orientation="horizontal"
 
-        <TextView
-            android:id="@+id/staticTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/tvimage"
-            android:text="@string/staticTitle" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/tvimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/card1"
+            android:scaleType="fitXY"
+            android:src="@drawable/image_gray" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="300dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="80dp"
+        android:background="@drawable/card2"
+        android:layout_marginBottom="10dp"
+        >
+
 
         <TextView
             android:id="@+id/tvtitle"
-            android:layout_width="match_parent"
+            android:layout_width="198dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
-
-            android:layout_toRightOf="@+id/staticTitle"
             android:hint="@string/None" />
 
         <TextView
@@ -37,12 +53,12 @@
             android:layout_marginTop="50dp"
 
 
-            android:layout_toEndOf="@+id/tvimage"
+
             android:text="@string/statticName" />
 
         <TextView
             android:id="@+id/pUserName"
-            android:layout_width="match_parent"
+            android:layout_width="146dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="50dp"
@@ -50,31 +66,20 @@
             android:layout_toRightOf="@+id/staticName"
             android:hint="@string/None" />
 
-        <TextView
-            android:id="@+id/createTime"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="1dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
-            android:hint="@string/None" />
-
-        <View
-            android:id="@+id/v_divider"
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:background="@color/whitesmoke" />
-
         <ImageView
-            android:id="@+id/tvimage"
-            android:layout_width="99dp"
-            android:layout_height="102dp"
-            android:src="@drawable/image_gray" />
+            android:id="@+id/collectClick"
+            android:layout_width="27dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="7dp"
+            app:srcCompat="@drawable/collection" />
+
+
     </RelativeLayout>
+
+
+
 
 </androidx.cardview.widget.CardView>

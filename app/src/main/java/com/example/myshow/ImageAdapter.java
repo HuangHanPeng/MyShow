@@ -45,7 +45,6 @@ public class ImageAdapter extends ArrayAdapter<mImage>{
             vh = new ViewHolder();
             vh.tvTitle = view.findViewById(R.id.tvtitle);
             vh.tvUsername = view.findViewById(R.id.pUserName);
-            vh.tvCreateTime = view.findViewById(R.id.createTime);
             vh.tvImage = view.findViewById(R.id.tvimage);
             view.setTag(vh);
 
@@ -58,7 +57,6 @@ public class ImageAdapter extends ArrayAdapter<mImage>{
 
         vh.tvTitle.setText(img.getTitle());
         vh.tvUsername.setText(img.getpUserName());
-        vh.tvCreateTime.setText(String.valueOf(img.getCreatetime()));
         vh.tvImage.setTag(position);
 
         Glide.with(mContext).load(img.getImageUrlList().get(0)).into(vh.tvImage);

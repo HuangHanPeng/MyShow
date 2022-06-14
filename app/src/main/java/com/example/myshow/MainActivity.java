@@ -1,6 +1,7 @@
 package com.example.myshow;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+import static com.example.myshow.Contants.GetcollectUrl;
 import static com.example.myshow.Contants.LoadUrl;
 import static com.example.myshow.Contants.LoginUrl;
 import static com.example.myshow.Contants.TAKE_PHOTO;
@@ -69,8 +70,8 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     ViewPager2 viewPager;
-    private LinearLayout t_home,t_collection,t_userpage;
-    private ImageView ivhome,ivcollection,ivuser,ivCurrent;
+    private LinearLayout t_home,t_collection,t_userpage,t_share;
+    private ImageView ivhome,ivcollection,ivuser,ivCurrent,ivshare;
     private LocalSQLite mySql;
     private user mUser = new user();
     private ContentValues userValues;
@@ -125,14 +126,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ivhome = findViewById(R.id.ivHome);
         ivcollection = findViewById(R.id.ivCollection);
         ivuser = findViewById(R.id.ivUser);
-
+        ivshare = findViewById(R.id.myshare);
         t_home = findViewById(R.id.home);
         t_home.setOnClickListener(this);
         t_collection = findViewById(R.id.collection);
         t_collection.setOnClickListener(this);
         t_userpage = findViewById(R.id.userpage);
         t_userpage.setOnClickListener(this);
-
+        t_share = findViewById(R.id.sharepage);
+        t_share.setOnClickListener(this);
 
 
         ivhome.setSelected(true);
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fragment依赖MainActivity,画面渲染主要在layout_main
         **/
             fragments.add(HomeFragement.newInstance(mUser.getmId(),LoadUrl));
+            fragments.add(HomeFragement.newInstance(mUser.getmId(),GetcollectUrl));
             fragments.add(HomeFragement.newInstance(mUser.getmId(),myShareUrl));
             fragments.add(UserPage.newInstance(mUser.getmId()));
 
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //实现页面滑动导航栏切换
     private void changView(int position) {
         ivCurrent.setSelected(false);
+        Log.d(TAG, String.valueOf(position));
         switch (position){
             case R.id.home:
                 viewPager.setCurrentItem(0);
@@ -184,12 +188,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ivcollection.setSelected(true);
                 ivCurrent = ivcollection;
                 break;
-            case R.id.userpage:
+            case R.id.sharepage:
                 viewPager.setCurrentItem(2);
             case 2:
+                Log.d(TAG, "当前位置"+String.valueOf(2));
+                ivshare.setSelected(true);
+                ivCurrent = ivshare;
+                break;
+            case R.id.userpage:
+                viewPager.setCurrentItem(3);
+            case 3:
+                Log.d(TAG, "当前位置"+String.valueOf(3));
                 ivuser.setSelected(true);
                 ivCurrent = ivuser;
                 break;
+
         }
 
     }

@@ -61,6 +61,7 @@ public class HomeFragement extends Fragment {
     private static final String ARG_URL = "url";
     private View rootView = null;
     private int current_page = 1;
+    private ImageView ivclick;
     private ListView lvImageList;
     private List<mImage> images;
     private ImageAdapter ImgAdapter;
@@ -86,11 +87,23 @@ public class HomeFragement extends Fragment {
     }
 
     private void initView() {
+
         lvImageList = rootView.findViewById(R.id.lv_image_lsit);
         lvImageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG,"HELLO");
+
+                ivclick = view.findViewById(R.id.collectClick);
+                ivclick.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Log.d(TAG, "点击位置" + String.valueOf(position));
+                        ivclick.setSelected(true);
+
+
+                    }
+                });
 
 
             }

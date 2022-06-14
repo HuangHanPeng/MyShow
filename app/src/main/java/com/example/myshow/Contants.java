@@ -47,6 +47,7 @@ public final class Contants {
     public static final String pFile = "image/upload";
     public static final String Publish = "share/add";
     public static final String pAhead = "user/update";
+    public static final String getcollect = "collect";
     //请求头添加
     public static String appId = "cb56ce0d2dad4ac5831e37e6d999bc7f";
     public static String appSecret = "95194c6e29a67fe0e4b478538115326986110";
@@ -66,6 +67,8 @@ public final class Contants {
     public static final String PubAheadUrl = usrurl + pAhead;
     //我的发布列表
     public static final String myShareUrl = usrurl + shareMyself;
+    //收藏列表获取
+    public static final String GetcollectUrl = usrurl + getcollect;
 
     //postConnect方法，用于申请post请求，传入表单数据，以及请求url，和功能使用的回调函数
     public static final void postConnect(FormBody formBody, String url, Callback callback){
@@ -129,7 +132,7 @@ public final class Contants {
         if(files!=null){
             for(int i = 0; i<files.size(); i++){
                 RequestBody body = RequestBody.create(MediaType.parse("image/jpg"),files.get(i));
-                requestBody.addFormDataPart("fileList","outputImage" + String.valueOf(i+1) ,body);
+                requestBody.addFormDataPart("fileList","outputImage" + String.valueOf(i+1)+ ".png" ,body);
             }
         }
 
