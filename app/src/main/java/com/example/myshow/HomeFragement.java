@@ -1,5 +1,6 @@
 package com.example.myshow;
 
+import static com.example.myshow.Contants.GetcollectUrl;
 import static com.example.myshow.Contants.LoadUrl;
 import static com.example.myshow.Contants.TAG;
 import static com.example.myshow.Contants.getConnect;
@@ -93,17 +94,27 @@ public class HomeFragement extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                ivclick = view.findViewById(R.id.collectClick);
-                ivclick.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Log.d(TAG, "点击位置" + String.valueOf(position));
-                        ivclick.setSelected(true);
+                if(mUrl.equals(GetcollectUrl)){
 
 
-                    }
-                });
+                }else{
+
+                    int lid = (int) ImgAdapter.getItem((int) id).getId();
+                    Log.d(TAG,"id = " + String.valueOf(lid));
+                    ivclick = (ImageView) view.findViewById(R.id.collectClick);
+                    Log.d(TAG, String.valueOf(ivclick));
+                    ivclick.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Log.d(TAG, "点击位置" + String.valueOf(id));
+                            ivclick.setSelected(true);
+
+
+                        }
+                    });
+                }
+
 
 
             }

@@ -64,11 +64,11 @@ public class ImageAdapter extends ArrayAdapter<mImage>{
     }
 
 
+
     class ViewHolder{
 
         TextView tvTitle;
         TextView tvUsername;
-        TextView tvCreateTime;
         ImageView tvImage;
 
 

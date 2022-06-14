@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/backphoto3">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +21,12 @@
         android:layout_height="40dp"
         android:layout_marginTop="48dp">
 
-
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/ic_baseline_person_24" />
 
         <EditText
             android:id="@+id/username2"
@@ -44,6 +50,12 @@
         android:layout_marginTop="16dp"
         >
 
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/ic_baseline_lock_24" />
 
         <EditText
             android:id="@+id/Password2"
@@ -78,8 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
 
-            android:background="@color/lightseagreen"
-            android:text="Sign"
+            android:background="@color/darksalmon"
+            android:text="注册"
             android:textColor="@color/white">
 
         </Button>
