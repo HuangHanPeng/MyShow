@@ -9,6 +9,7 @@ import static com.example.myshow.Contants.postConnect;
 import static java.util.Comparator.reverseOrder;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Build;
@@ -99,20 +100,36 @@ public class HomeFragement extends Fragment {
 
                 }else{
 
-                    int lid = (int) ImgAdapter.getItem((int) id).getId();
-                    Log.d(TAG,"id = " + String.valueOf(lid));
-                    ivclick = (ImageView) view.findViewById(R.id.collectClick);
-                    Log.d(TAG, String.valueOf(ivclick));
-                    ivclick.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    if(mUrl.equals(GetcollectUrl)){
 
-                            Log.d(TAG, "点击位置" + String.valueOf(id));
-                            ivclick.setSelected(true);
+                    }else{
 
+                        int lid = (int) ImgAdapter.getItem((int) id).getId();
+                        Log.d(TAG,"id = " + String.valueOf(lid));
+                        ivclick = (ImageView) view.findViewById(R.id.collectClick);
+                        Log.d(TAG, String.valueOf(ivclick));
+                        ivclick.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                        }
-                    });
+                                Log.d(TAG, "点击位置" + String.valueOf(id));
+                                ivclick.setSelected(true);
+                                Intent intent = new Intent();
+                                JSONObject jsonObject = new JSONObject();
+                                try {
+                                    Log.d(TAG, String.valueOf(ImgAdapter.getItem((int) id).getId()));
+                                    jsonObject.put("shareId",ImgAdapter.getItem((int) id).getId());
+                                    jsonObject.put("userId",mId);
+                                    Contants.postConnect(jsonObject.toString(),Contants.GetcollectUrl,Loadcallback);
+                                    Log.d(TAG,"mid="+String.valueOf(ImgAdapter.getItem(position).getId()));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                    }
+
                 }
 
 

@@ -165,12 +165,13 @@ public class postImage extends AppCompatActivity implements View.OnClickListener
                         code = baseResponse.getCode();
                         Log.d(TAG,String.valueOf(code));
                         msg = baseResponse.getMsg();
-                        imageCode = resData.getImageCode();
-                        Log.d(TAG,String.valueOf(imageCode));
+
                         if(code == 200){
+
                             Log.d(TAG, "publish");
                             JSONObject pushJson = new JSONObject();
                             try {
+                                imageCode = resData.getImageCode();
                                 pushJson.put("content",mContent);
                                 pushJson.put("imageCode",imageCode);
                                 pushJson.put("pUserId",pId);
